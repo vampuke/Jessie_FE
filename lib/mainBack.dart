@@ -1,52 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
-import 'package:jessie_wish/pages/loginPage.dart';
-import 'dart:async';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
-import 'package:jessie_wish/common/redux/LamourState.dart';
-import 'package:jessie_wish/common/utils/commonUtils.dart';
-import 'package:jessie_wish/common/style/style.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  /// 创建Store，引用 GSYState 中的 appReducer 实现 Reducer 方法
-  /// initialState 初始化 State
-  final store = new Store<LamourState>(
-    appReducer,
-
-    ///初始化数据
-    initialState: new LamourState(
-      themeData: CommonUtils.getThemeData(LamourColors.primarySwatch),
-    ),
-  );
-
-  MyApp({Key key}) : super(key: key);
-
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    /// 通过 StoreProvider 应用 store
-    return new StoreProvider(
-      store: store,
-      child: new StoreBuilder<LamourState>(builder: (context, store) {
-        return new MaterialApp(
-            theme: store.state.themeData,
-            home: new LoginPage()
-            // routes: {
-            //   LoginPage.sName: (context) {
-            //     return new GSYLocalizations(
-            //       child: new LoginPage(),
-            //     );
-            //   },
-            // });
-        );
-      }),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        // This is the theme of your application.
+        //
+        // Try running your application with "flutter run". You'll see the
+        // application has a blue toolbar. Then, without quitting the app, try
+        // changing the primarySwatch below to Colors.green and then invoke
+        // "hot reload" (press "r" in the console where you ran "flutter run",
+        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // Notice that the counter didn't reset back to zero; the application
+        // is not restarted.
+        primarySwatch: Colors.blue,
+      ),
+      home: MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }
@@ -70,7 +44,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 1;
+  int _counter = 0;
 
   void _incrementCounter() {
     setState(() {
@@ -81,17 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
       // called again, and so nothing would appear to happen.
       _counter++;
     });
-  }
-
-  void _getNetwork() async {
-    try {
-      Response response =
-          await Dio().get("http://192.168.50.122:5050/user/logout");
-      print(response);
-      print(response.headers);
-    } catch (e) {
-      print(e);
-    }
   }
 
   @override
@@ -139,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _getNetwork,
+        onPressed: _incrementCounter,
         tooltip: 'Increment',
         child: Icon(Icons.add),
       ), // This trailing comma makes auto-formatting nicer for build methods.
