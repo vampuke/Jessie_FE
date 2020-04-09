@@ -1,4 +1,4 @@
-package com.example.jessie_wish;
+package com.vampuck.jessie_wish;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

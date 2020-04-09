@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// 带图标的输入框
-class InputWidget extends StatefulWidget {
+class LamourInputWidget extends StatefulWidget {
   final bool obscureText;
 
   final String hintText;
@@ -14,14 +13,13 @@ class InputWidget extends StatefulWidget {
 
   final TextEditingController controller;
 
-  InputWidget({Key key, this.hintText, this.iconData, this.onChanged, this.textStyle, this.controller, this.obscureText = false}) : super(key: key);
+  LamourInputWidget({Key key, this.hintText, this.iconData, this.onChanged, this.textStyle, this.controller, this.obscureText = false}) : super(key: key);
 
   @override
   _InputWidgetState createState() => new _InputWidgetState();
 }
 
-/// State for [GSYInputWidget] widgets.
-class _InputWidgetState extends State<InputWidget> {
+class _InputWidgetState extends State<LamourInputWidget> {
 
   _InputWidgetState() : super();
 
@@ -33,7 +31,7 @@ class _InputWidgetState extends State<InputWidget> {
       obscureText: widget.obscureText,
       decoration: new InputDecoration(
         hintText: widget.hintText,
-        // icon: widget.iconData == null ? null : new Icon(widget.iconData),
+        icon: widget.iconData == null ? null : new Icon(widget.iconData),
       ),
     );
   }

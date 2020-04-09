@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:jessie_wish/common/local/localStorage.dart';
 import 'package:jessie_wish/common/config/config.dart';
 import 'package:jessie_wish/common/style/style.dart';
+import 'package:jessie_wish/common/utils/navigatorUtils.dart';
 import 'package:jessie_wish/widget/inputWidget.dart';
 import 'package:jessie_wish/widget/flexButton.dart';
 import 'package:jessie_wish/common/utils/commonUtils.dart';
 import 'package:jessie_wish/common/redux/LamourState.dart';
+import 'package:jessie_wish/common/service/userService.dart';
+import 'package:jessie_wish/common/service/wishService.dart';
 
 class LoginPage extends StatefulWidget {
   static final String sName = "login";
@@ -25,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController userController = new TextEditingController();
   final TextEditingController pwController = new TextEditingController();
 
-    _LoginPageState() : super();
+  _LoginPageState() : super();
 
   @override
   void initState() {
@@ -53,34 +55,39 @@ class _LoginPageState extends State<LoginPage> {
           body: new Container(
             color: Theme.of(context).primaryColor,
             child: new Center(
-              //防止overFlow的现象
               child: SafeArea(
                 child: SingleChildScrollView(
                   child: new Card(
                     elevation: 5.0,
-                    shape: new RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10.0))),
+                    shape: new RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(10.0))),
                     color: Color(LamourColors.cardWhite),
-                    margin: const EdgeInsets.only(left:30.0, right: 30.0),
+                    margin: const EdgeInsets.only(left: 30.0, right: 30.0),
                     child: new Padding(
-                      padding: new EdgeInsets.only(left: 30.0, top: 40.0, right: 30.0, bottom: 0.0),
+                      padding: new EdgeInsets.only(
+                          left: 30.0, top: 40.0, right: 30.0, bottom: 0.0),
                       child: new Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: <Widget>[
-                          new Image(image: new AssetImage(GSYICons.DEFAULT_USER_ICON), width: 90.0, height: 90.0),
+                          new Image(
+                              image:
+                                  new AssetImage(LamourICons.DEFAULT_USER_ICON),
+                              width: 150.0,
+                              height: 150.0),
                           new Padding(padding: new EdgeInsets.all(10.0)),
-                          new InputWidget(
+                          new LamourInputWidget(
                             hintText: "Input name",
-                            // iconData: GSYICons.LOGIN_USER,
+                            iconData: LamourICons.USER,
                             onChanged: (String value) {
                               _userName = value;
                             },
                             controller: userController,
                           ),
                           new Padding(padding: new EdgeInsets.all(10.0)),
-                          new InputWidget(
+                          new LamourInputWidget(
                             hintText: "Input password",
-                            // iconData: GSYICons.LOGIN_PW,
+                            iconData: LamourICons.LOCK,
                             obscureText: true,
                             onChanged: (String value) {
                               _password = value;
@@ -100,15 +107,19 @@ class _LoginPageState extends State<LoginPage> {
                                 return;
                               }
                               CommonUtils.showLoadingDialog(context);
-                              // UserDao.login(_userName.trim(), _password.trim(), store).then((res) {
-                              //   Navigator.pop(context);
-                              //   if (res != null && res.result) {
-                              //     new Future.delayed(const Duration(seconds: 1), () {
-                              //       // NavigatorUtils.goHome(context);
-                              //       return true;
-                              //     });
-                              //   }
-                              // });
+                              UserSvc.login(
+                                      _userName.trim(), _password.trim(), store)
+                                  .then((res) {
+                                Navigator.pop(context);
+                                if (res == true) {
+                                  WishSvc.getWish(store).then((res) {
+                                    if (res == true) {
+                                      NavigatorUtils.goHome(context);
+                                    }
+                                  });
+                                }
+                                print(res);
+                              });
                               print('login');
                             },
                           ),

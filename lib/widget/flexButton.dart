@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
 
-/**
- * 充满的button
- * Created by guoshuyu
- * Date: 2018-07-16
- */
 class FlexButton extends StatelessWidget {
   final String text;
 

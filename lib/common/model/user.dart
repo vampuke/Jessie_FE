@@ -1,29 +1,26 @@
-import 'package:json_annotation/json_annotation.dart';
-
+import 'package:json_annotation/json_annotation.dart'; 
+  
 part 'user.g.dart';
 
+
 @JsonSerializable()
-class User {
+  class User extends Object {
 
-  User(
-      this.user_id,
-      this.user_name,
-      this.password,
-      this.role,
-      this.is_delete);
+  @JsonKey(name: 'user_id')
+  int userId;
 
-  int user_id;
-  String user_name;
-  String password;
+  @JsonKey(name: 'user_name')
+  String userName;
+
+  @JsonKey(name: 'role')
   int role;
-  int is_delete;
 
+  User(this.userId,this.userName,this.role,);
 
-  factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
-
+  factory User.fromJson(Map<String, dynamic> srcJson) => _$UserFromJson(srcJson);
 
   Map<String, dynamic> toJson() => _$UserToJson(this);
 
-  User.empty();
-
 }
+
+  
