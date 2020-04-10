@@ -6,6 +6,7 @@ import 'package:jessie_wish/common/model/anniv_list.dart';
 import 'package:jessie_wish/common/redux/themeRedux.dart';
 import 'package:jessie_wish/common/redux/userRedux.dart';
 import 'package:jessie_wish/common/model/user.dart' as User;
+import 'package:jessie_wish/common/redux/voucherRedux.dart';
 import 'package:jessie_wish/common/redux/wishRedux.dart';
 import 'package:jessie_wish/common/redux/foodRedux.dart';
 import 'package:jessie_wish/common/redux/annivRedux.dart';
@@ -34,6 +35,8 @@ LamourState appReducer(LamourState state, action) {
     userInfo: userReducer(state.userInfo, action),
 
     themeData: themeDataReducer(state.themeData, action),
+
+    voucherList: voucherReducer(state.voucherList, action),
 
     wishList: wishReducer(state.wishList, action),
 

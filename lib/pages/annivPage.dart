@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:intl/intl.dart';
 import 'package:jessie_wish/common/redux/LamourState.dart';
 import 'package:jessie_wish/common/service/annivService.dart';
+import 'package:jessie_wish/common/utils/commonUtils.dart';
 import 'package:jessie_wish/widget/listState.dart';
 import 'package:jessie_wish/widget/pullDownRefreshWidget.dart';
 import 'package:redux/redux.dart';
@@ -22,6 +24,8 @@ class _AnnivPageState extends State<AnnivPage>
   int _index = 0;
 
   String _newAnniv = "";
+
+  DateTime _selectedDate = DateTime.now();
 
   final TextEditingController annivController = new TextEditingController();
 
@@ -83,7 +87,6 @@ class _AnnivPageState extends State<AnnivPage>
     setState(() {
       pullDownRefreshWidgetControl.dataList =
           _getStore().state.annivList.anniv ??= [];
-      print(pullDownRefreshWidgetControl.dataList);
     });
   }
 
@@ -96,9 +99,78 @@ class _AnnivPageState extends State<AnnivPage>
 
   _renderEventItem(Anniv voucher) {
     AnnivViewModel eventViewModel = AnnivViewModel.fromAnnivMap(voucher);
-    return new AnnivItem(eventViewModel, onPressed: () {
-      print('Clicked');
+    return new AnnivItem(eventViewModel, onPressed: () {});
+  }
+
+  Future<void> _selectDate(state) async {
+    final DateTime date = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime(2017),
+      lastDate: DateTime.now(),
+    );
+    if (date == null) return;
+
+    state(() {
+      _selectedDate = date;
     });
+  }
+
+  Future<void> _addAnniv() async {
+    CommonUtils.showLoadingDialog(context);
+    AnnivSvc.addAnniv(_getStore(), _newAnniv,
+            _selectedDate.toLocal().millisecondsSinceEpoch)
+        .then((res) {
+      Navigator.pop(context);
+      if (res == true) {
+        _newAnniv = "";
+        _selectedDate = DateTime.now();
+        Navigator.pop(context);
+        handleRefresh();
+      }
+    });
+  }
+
+  void _showAddDialog() {
+    _newAnniv = "";
+    _selectedDate = DateTime.now();
+    annivController.value = new TextEditingValue(text: "");
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, state) {
+          return AlertDialog(
+              title: new Text("Add new anniversary"),
+              content: new Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  new TextField(
+                    controller: annivController,
+                    onChanged: (String value) {
+                      _newAnniv = value;
+                    },
+                    maxLines: 2,
+                    decoration: new InputDecoration(hintText: "Event"),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      _selectDate(state);
+                    },
+                    child: Text(DateFormat.yMMMd().format(_selectedDate)),
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Cancel")),
+                FlatButton(onPressed: _addAnniv, child: Text("Add")),
+              ]);
+        });
+      },
+    );
   }
 
   @override
@@ -111,51 +183,7 @@ class _AnnivPageState extends State<AnnivPage>
               backgroundColor: Theme.of(context).primaryColor,
               actions: <Widget>[
                 new IconButton(
-                  onPressed: () {
-                    _newAnniv = "";
-                    annivController.value = new TextEditingValue(text: "");
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: new Text("Reason(optional)"),
-                          content: new TextField(
-                            controller: annivController,
-                            onChanged: (String value) {
-                              _newAnniv = value;
-                            },
-                            decoration: new InputDecoration(
-                                hintText: "Input your wish"),
-                          ),
-                          actions: <Widget>[
-                            FlatButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text("Cancel")),
-                            FlatButton(
-                                onPressed: () async {
-                                  // CommonUtils.showLoadingDialog(context);
-                                  // AnnivSvc.addNewVoucher(
-                                  //         _getStore(),
-                                  //         _newanniv,
-                                  //         _getStore().state.userInfo.userId)
-                                  //     .then((res) {
-                                  //   Navigator.pop(context);
-                                  //   if (res == true) {
-                                  //     _newVoucher = "";
-                                  //     Navigator.pop(context);
-                                  //     handleRefresh();
-                                  //   }
-                                  // });
-                                  // print('clicked');
-                                },
-                                child: Text("Add")),
-                          ],
-                        );
-                      },
-                    );
-                  },
+                  onPressed: _showAddDialog,
                   icon: new Icon(
                     Icons.add,
                     size: 30.0,

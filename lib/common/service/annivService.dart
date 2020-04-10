@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jessie_wish/common/config/config.dart';
 import 'package:jessie_wish/common/local/localStorage.dart';
@@ -24,6 +25,24 @@ class AnnivSvc {
         return false;
       }
     } else {
+      return false;
+    }
+  }
+
+  static addAnniv(store, String title, int date) async {
+    Map requestParams = {"title": title, "datetime": date};
+    var res = await HttpManager.netFetch(
+        Address.anniv(), requestParams, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (res.data["code"] == 200) {
+        Fluttertoast.showToast(msg: "Success");
+        return true;
+      } else {
+        Fluttertoast.showToast(msg: res.data["msg"]);
+        return false;
+      }
+    } else {
+      Fluttertoast.showToast(msg: "Network error");
       return false;
     }
   }

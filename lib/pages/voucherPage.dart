@@ -154,14 +154,14 @@ class _VoucherPageState extends State<VoucherPage>
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: new Text("Reason(optional)"),
+                          title: new Text("Add new voucher"),
                           content: new TextField(
                             controller: voucherController,
                             onChanged: (String value) {
                               _newVoucher = value;
                             },
                             decoration: new InputDecoration(
-                                hintText: "Input your wish"),
+                                hintText: "Reason(optional)"),
                           ),
                           actions: <Widget>[
                             FlatButton(
