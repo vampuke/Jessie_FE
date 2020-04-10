@@ -24,8 +24,8 @@ Voucher _$VoucherFromJson(Map<String, dynamic> json) {
   return Voucher(
     json['id'] as int,
     json['title'] as String,
-    json['datetime_create'] as String,
-    json['datetime_expire'] as String,
+    json['datetime_create'] as int,
+    json['datetime_expire'] as int,
     json['status'] as int,
     json['is_delete'] as int,
     json['user_id'] as int,

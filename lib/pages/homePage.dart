@@ -4,6 +4,7 @@ import 'package:jessie_wish/common/style/style.dart';
 import 'package:jessie_wish/pages/annivPage.dart';
 import 'package:jessie_wish/pages/flowerPage.dart';
 import 'package:jessie_wish/pages/foodPage.dart';
+import 'package:jessie_wish/pages/toolsPage.dart';
 import 'package:jessie_wish/pages/voucherPage.dart';
 import 'package:jessie_wish/pages/wishPage.dart';
 import 'package:jessie_wish/widget/tabBarWidget.dart';
@@ -39,7 +40,7 @@ class HomePage extends StatelessWidget {
           new Text(
             text,
             style: TextStyle(
-              fontSize: 8,
+              fontSize: 10,
             ),
           )
         ],
@@ -53,9 +54,8 @@ class HomePage extends StatelessWidget {
     List<Widget> tabs = [
       _renderTab(LamourICons.WISH, "WISH"),
       _renderTab(LamourICons.VOUCHER, "VOUCHER"),
-      _renderTab(LamourICons.FOOD, "FOOD"),
-      _renderTab(LamourICons.FLOWER, "FLOWER"),
       _renderTab(LamourICons.CALENDAR, "ANNIV"),
+      _renderTab(LamourICons.TOOLS, "TOOLS")
     ];
     return WillPopScope(
       onWillPop: () {
@@ -67,9 +67,8 @@ class HomePage extends StatelessWidget {
         tabViews: [
           new WishPage(),
           new VoucherPage(),
-          new FoodPage(),
-          new FlowerPage(),
-          new AnnivPage()
+          new AnnivPage(),
+          new ToolsPage()
         ],
         backgroundColor: LamourColors.primarySwatch,
         indicatorColor: Color(LamourColors.white),

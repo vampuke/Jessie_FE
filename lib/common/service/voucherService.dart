@@ -75,7 +75,7 @@ class VoucherSvc {
       store.dispatch(new UpdateVoucherListAction(voucherListData.data));
       return true;
     } else {
-      store.dispatch(new UpdateVoucherListAction(new VoucherList([])));
+      getAvailableVoucher(store);
       return false;
     }
   }

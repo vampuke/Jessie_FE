@@ -7,7 +7,6 @@ class OneWordService {
     Dio dio = new Dio();
     var response = await dio.get("https://v1.hitokoto.cn/?c=d");
     if (response != null) {
-      print(response);
       LocalStorage.save(Config.ONE_WORD, response.data['hitokoto']);
       LocalStorage.save(Config.WORD_AUTHOR, response.data['from']);
     }

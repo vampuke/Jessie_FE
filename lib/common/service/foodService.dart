@@ -37,7 +37,7 @@ class FoodSvc {
       store.dispatch(new UpdateFoodListAction(foodListData.data));
       return true;
     } else {
-      store.dispatch(new UpdateFoodListAction(new FoodList([])));
+      getFoodList(store);
       return false;
     }
   }

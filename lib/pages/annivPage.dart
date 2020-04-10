@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:intl/intl.dart';
 import 'package:jessie_wish/common/redux/LamourState.dart';
 import 'package:jessie_wish/common/service/annivService.dart';
+import 'package:jessie_wish/common/style/style.dart';
 import 'package:jessie_wish/common/utils/commonUtils.dart';
 import 'package:jessie_wish/widget/listState.dart';
 import 'package:jessie_wish/widget/pullDownRefreshWidget.dart';
@@ -144,6 +145,19 @@ class _AnnivPageState extends State<AnnivPage>
               content: new Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
+                  InkWell(
+                      onTap: () {
+                        _selectDate(state);
+                      },
+                      child: Container(
+                        child: Text(DateFormat.yMMMd().format(_selectedDate)),
+                        margin: EdgeInsets.only(top: 6.0, bottom: 6.0),
+                        padding: EdgeInsets.only(top: 6.0, bottom: 6.0, left: 40.0, right: 40.0),
+                        decoration: BoxDecoration(
+                          border: new Border.all(width: 1.0, color: Color(LamourColors.subLightTextColor)),
+                          borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+                        ),
+                      )),
                   new TextField(
                     controller: annivController,
                     onChanged: (String value) {
@@ -151,12 +165,6 @@ class _AnnivPageState extends State<AnnivPage>
                     },
                     maxLines: 2,
                     decoration: new InputDecoration(hintText: "Event"),
-                  ),
-                  InkWell(
-                    onTap: () {
-                      _selectDate(state);
-                    },
-                    child: Text(DateFormat.yMMMd().format(_selectedDate)),
                   ),
                 ],
               ),

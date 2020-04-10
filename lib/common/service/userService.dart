@@ -24,7 +24,6 @@ class UserSvc {
         User user = User.fromJson(res.data);
         await LocalStorage.save(Config.USER_INFO, json.encode(user.toJson()));
         var resultData = new DataResult(user, true);
-        print(resultData.data);
         store.dispatch(new UpdateUserAction(resultData.data));
         return true;
       } else {

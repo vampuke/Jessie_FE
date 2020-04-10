@@ -28,10 +28,10 @@ part 'voucher_list.g.dart';
   String title;
 
   @JsonKey(name: 'datetime_create')
-  String datetimeCreate;
+  int datetimeCreate;
 
   @JsonKey(name: 'datetime_expire')
-  String datetimeExpire;
+  int datetimeExpire;
 
   @JsonKey(name: 'status')
   int status;

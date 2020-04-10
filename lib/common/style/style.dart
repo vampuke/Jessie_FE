@@ -226,6 +226,8 @@ class LamourICons {
       const IconData(0xe600, fontFamily: LamourICons.FONT_FAMILY);
   static const IconData WISH =
       const IconData(0xe81c, fontFamily: LamourICons.FONT_FAMILY);
+  static const IconData TOOLS =
+      const IconData(0xe655, fontFamily: LamourICons.FONT_FAMILY);
   static const IconData VOUCHER =
       const IconData(0xe690, fontFamily: LamourICons.FONT_FAMILY);
   static const IconData Check =

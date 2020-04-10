@@ -15,13 +15,6 @@ class AnnivItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Store<LamourState> _getStore() {
-      if (context == null) {
-        return null;
-      }
-      return StoreProvider.of(context);
-    }
-
     return new Container(
         child: new LamourCard(
             child: new FlatButton(

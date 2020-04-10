@@ -96,7 +96,6 @@ class _WishPageState extends State<WishPage>
 
   List<Wish> filterWish(List<Wish> wishList) {
     if (wishList.length != 0) {
-      print(currentStatus);
       return wishList.where((wish) => (wish.status == currentStatus)).toList();
     } else {
       return wishList;
@@ -191,7 +190,6 @@ class _WishPageState extends State<WishPage>
                   onPressed: () {
                     _newWish = "";
                     wishController.value = new TextEditingValue(text: "");
-                    print(wishController.value);
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -229,7 +227,6 @@ class _WishPageState extends State<WishPage>
                                       handleRefresh();
                                     }
                                   });
-                                  print('clicked');
                                 },
                                 child: Text("Add")),
                           ],

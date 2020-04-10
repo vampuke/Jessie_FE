@@ -56,7 +56,7 @@ class AnnivSvc {
       store.dispatch(new UpdateAnnivListAction(annivListData.data));
       return true;
     } else {
-      store.dispatch(new UpdateAnnivListAction(new AnnivList([])));
+      getAnnivList(store);
       return false;
     }
   }

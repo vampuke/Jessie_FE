@@ -87,7 +87,6 @@ class _VoucherPageState extends State<VoucherPage>
     setState(() {
       pullDownRefreshWidgetControl.dataList =
           _getStore().state.voucherList?.voucher ??= [];
-      print(pullDownRefreshWidgetControl.dataList);
     });
   }
 
@@ -101,7 +100,6 @@ class _VoucherPageState extends State<VoucherPage>
   _renderEventItem(Voucher voucher) {
     VoucherViewModel eventViewModel = VoucherViewModel.fromVoucherMap(voucher);
     return new VoucherItem(eventViewModel, onPressed: () {
-      print("clicked");
       User.User _currentUser = _getStore().state.userInfo;
       if (_currentUser.role == 1) {
         showDialog(
@@ -184,7 +182,6 @@ class _VoucherPageState extends State<VoucherPage>
                                       handleRefresh();
                                     }
                                   });
-                                  print('clicked');
                                 },
                                 child: Text("Add")),
                           ],

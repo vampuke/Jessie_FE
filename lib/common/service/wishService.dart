@@ -95,6 +95,7 @@ class WishSvc {
       store.dispatch(new UpdateWishListAction(wishListData.data));
       return true;
     } else {
+      getWish(store);
       return false;
     }
   }

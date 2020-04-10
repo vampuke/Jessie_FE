@@ -40,8 +40,8 @@ class VoucherItem extends StatelessWidget {
                                     child: new Text(
                                         "Expire date: " +
                                             DateTime.fromMillisecondsSinceEpoch(
-                                                    int.parse(voucherViewModel
-                                                        .voucherDate))
+                                                    voucherViewModel
+                                                        .voucherDate)
                                                 .toLocal()
                                                 .toString()
                                                 .substring(2, 10),
@@ -73,7 +73,7 @@ class VoucherViewModel {
   String voucherName;
   int voucherUser;
   int voucherStatus;
-  String voucherDate;
+  int voucherDate;
   int voucherId;
 
   VoucherViewModel.fromVoucherMap(Voucher voucher) {

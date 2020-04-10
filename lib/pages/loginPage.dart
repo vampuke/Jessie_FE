@@ -118,9 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                                     }
                                   });
                                 }
-                                print(res);
                               });
-                              print('login');
                             },
                           ),
                           new Padding(padding: new EdgeInsets.all(30.0)),

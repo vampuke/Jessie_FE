@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jessie_wish/pages/foodPage.dart';
 import 'package:jessie_wish/pages/homePage.dart';
 import 'package:jessie_wish/pages/loginPage.dart';
 
@@ -18,5 +19,18 @@ class NavigatorUtils {
 
   static goHome(BuildContext context) {
     Navigator.pushReplacementNamed(context, HomePage.sName);
+  }
+
+  static goFood(BuildContext context) {
+    NavigatorRouter(context, new FoodPage());
+  }
+
+  static goFlower(BuildContext context) {
+    // NavigatorRouter(context, new FlowerPage());
+  }
+
+  static NavigatorRouter(BuildContext context, Widget widget) {
+    return Navigator.push(
+        context, new CupertinoPageRoute(builder: (context) => widget));
   }
 }
