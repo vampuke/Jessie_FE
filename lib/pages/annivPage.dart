@@ -139,8 +139,9 @@ class _AnnivPageState extends State<AnnivPage>
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, state) {
-          return AlertDialog(
+        return StatefulBuilder(
+          builder: (context, state) {
+            return AlertDialog(
               title: new Text("Add new anniversary"),
               content: new Column(
                 mainAxisSize: MainAxisSize.min,
@@ -152,10 +153,14 @@ class _AnnivPageState extends State<AnnivPage>
                       child: Container(
                         child: Text(DateFormat.yMMMd().format(_selectedDate)),
                         margin: EdgeInsets.only(top: 6.0, bottom: 6.0),
-                        padding: EdgeInsets.only(top: 6.0, bottom: 6.0, left: 40.0, right: 40.0),
+                        padding: EdgeInsets.only(
+                            top: 6.0, bottom: 6.0, left: 40.0, right: 40.0),
                         decoration: BoxDecoration(
-                          border: new Border.all(width: 1.0, color: Color(LamourColors.subLightTextColor)),
-                          borderRadius: new BorderRadius.all(new Radius.circular(5.0)),
+                          border: new Border.all(
+                              width: 1.0,
+                              color: Color(LamourColors.subLightTextColor)),
+                          borderRadius:
+                              new BorderRadius.all(new Radius.circular(5.0)),
                         ),
                       )),
                   new TextField(
@@ -175,8 +180,10 @@ class _AnnivPageState extends State<AnnivPage>
                     },
                     child: Text("Cancel")),
                 FlatButton(onPressed: _addAnniv, child: Text("Add")),
-              ]);
-        });
+              ],
+            );
+          },
+        );
       },
     );
   }
@@ -187,26 +194,27 @@ class _AnnivPageState extends State<AnnivPage>
     return new StoreBuilder<LamourState>(
       builder: (context, store) {
         return new Scaffold(
-            appBar: new AppBar(
-              backgroundColor: Theme.of(context).primaryColor,
-              actions: <Widget>[
-                new IconButton(
-                  onPressed: _showAddDialog,
-                  icon: new Icon(
-                    Icons.add,
-                    size: 30.0,
-                  ),
+          appBar: new AppBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            actions: <Widget>[
+              new IconButton(
+                onPressed: _showAddDialog,
+                icon: new Icon(
+                  Icons.add,
+                  size: 30.0,
                 ),
-              ],
-            ),
-            body: PullDownRefreshWidget(
-              pullDownRefreshWidgetControl,
-              (BuildContext context, int index) => _renderEventItem(
-                  pullDownRefreshWidgetControl.dataList[index]),
-              handleRefresh,
-              onLoadMore,
-              refreshKey: refreshIndicatorKey,
-            ));
+              ),
+            ],
+          ),
+          body: PullDownRefreshWidget(
+            pullDownRefreshWidgetControl,
+            (BuildContext context, int index) =>
+                _renderEventItem(pullDownRefreshWidgetControl.dataList[index]),
+            handleRefresh,
+            onLoadMore,
+            refreshKey: refreshIndicatorKey,
+          ),
+        );
       },
     );
   }
