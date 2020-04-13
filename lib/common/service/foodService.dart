@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jessie_wish/common/config/config.dart';
 import 'package:jessie_wish/common/local/localStorage.dart';
@@ -24,6 +25,24 @@ class FoodSvc {
         return false;
       }
     } else {
+      return false;
+    }
+  }
+
+  static addFood(store, String foodName, int type, int userId) async {
+    Map requestParams = {"food_name": foodName, "type": type, "user_id": userId};
+    var res = await HttpManager.netFetch(
+        Address.food(), requestParams, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (res.data["code"] == 200) {
+        Fluttertoast.showToast(msg: "Success");
+        return true;
+      } else {
+        Fluttertoast.showToast(msg: res.data["msg"]);
+        return false;
+      }
+    } else {
+      Fluttertoast.showToast(msg: "Network error");
       return false;
     }
   }

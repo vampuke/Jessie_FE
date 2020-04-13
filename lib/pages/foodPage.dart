@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:jessie_wish/common/model/food_list.dart';
 import 'package:jessie_wish/common/redux/LamourState.dart';
+import 'package:jessie_wish/common/service/foodService.dart';
 import 'package:jessie_wish/common/style/style.dart';
+import 'package:jessie_wish/common/utils/commonUtils.dart';
 import 'package:redux/redux.dart';
 
 class FoodPage extends StatefulWidget {
@@ -14,6 +16,8 @@ class FoodPage extends StatefulWidget {
 class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
   String _gender = "She";
   String _type = "Like";
+  String _newFood = "";
+  final TextEditingController foodController = new TextEditingController();
   List<Food> _foodList;
   List<Food> _filteredList;
 
@@ -33,6 +37,7 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
   @override
   void didChangeDependencies() {
     _foodList = _getStore().state.foodList.food;
+    _updateFoodList();
     print(_foodList);
     _filterFood();
     super.didChangeDependencies();
@@ -57,40 +62,81 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
         foodList.add(foodItem(food.foodName));
       }
     }
-    foodList.add(addBtn);
+    foodList.add(Container());
     print(foodList);
     return foodList;
   }
 
-  Widget foodItem(foodName) {
-    return Container(
-      padding: EdgeInsets.only(left: 12.0, right: 12.0),
-      height: 36.0,
-      decoration: BoxDecoration(
-          border: Border.all(width: 1.0, color: Color(LamourColors.actionBlue)),
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      child: Text(
-        foodName,
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 14, height: 2.0),
-      ),
+  Future<void> _updateFoodList() async {
+    Store store = _getStore();
+    var res = await FoodSvc.getFoodList(store);
+    if (res) {
+      setState(() {
+        _foodList = store.state.foodList.food;
+        _filterFood();
+      });
+    }
+  }
+
+  Future<void> _addFood() async {
+    CommonUtils.showLoadingDialog(context);
+    int foodType = _type == "Like" ? 1 : 2;
+    int userId = _gender == "He" ? 1 : 2;
+    FoodSvc.addFood(_getStore(), _newFood, foodType, userId).then((res) {
+      Navigator.pop(context);
+      if (res == true) {
+        _newFood = "";
+        Navigator.pop(context);
+        _updateFoodList();
+      }
+    });
+  }
+
+  void _addFoodDialog() {
+    _newFood = "";
+    foodController.value = new TextEditingValue(text: "");
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(builder: (context, state) {
+          return AlertDialog(
+              title: new Text(_gender + " " + _type.toLowerCase()),
+              content: new Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  new TextField(
+                    controller: foodController,
+                    onChanged: (String value) {
+                      _newFood = value;
+                    },
+                    decoration:
+                        new InputDecoration(hintText: "Input food name"),
+                  ),
+                ],
+              ),
+              actions: <Widget>[
+                FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Cancel")),
+                FlatButton(onPressed: _addFood, child: Text("Add")),
+              ]);
+        });
+      },
     );
   }
 
-  Widget addBtn = InkWell(
-    child: Container(
-      padding: EdgeInsets.only(left: 12.0, right: 12.0),
-      height: 36.0,
-      decoration: BoxDecoration(
-          border: Border.all(width: 1.0, color: Color(LamourColors.actionBlue)),
-          borderRadius: BorderRadius.all(Radius.circular(10.0))),
-      child: Text(
-        "Add",
-        style: TextStyle(color: Color(LamourColors.actionBlue), fontSize: 14, height: 2.0),
+  Widget foodItem(foodName) {
+    return Chip(
+      backgroundColor: Color(
+          _type == "Like" ? LamourColors.likeGreen : LamourColors.dislikeRed),
+      label: Text(foodName),
+      labelStyle: TextStyle(
+        color: Colors.white,
       ),
-    ),
-    onTap: () {print('aaa');},
-  );
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -101,6 +147,7 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
             padding: EdgeInsets.all(5.0),
             child: CupertinoSlidingSegmentedControl(
                 backgroundColor: Color(LamourColors.primaryValue),
+                thumbColor: Colors.white,
                 groupValue: _gender,
                 onValueChanged: (value) {
                   setState(() {
@@ -121,6 +168,7 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
             padding: EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
             child: CupertinoSlidingSegmentedControl(
                 backgroundColor: Color(LamourColors.primaryValue),
+                thumbColor: Colors.white,
                 groupValue: _type,
                 onValueChanged: (value) {
                   setState(() {
@@ -151,6 +199,15 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[gender, type, foodDisplay],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _addFoodDialog,
+        child: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        backgroundColor: Color(LamourColors.actionGreen),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

@@ -23,6 +23,11 @@ class LamourColors {
   static const int deleteRed = 0xFFD81E06;
   static const int subTextColor = 0xff959595;
   static const int subLightTextColor = 0xffc4c4c4;
+  static const int lightGray = 0xFFE0E0E0;
+  static const int likeGreen = 0xFF00C853;
+  static const int dislikeRed = 0xFFFF6D00;
+  static const int actionGreen = 0xFF00B483;
+  static const int happyOrange = 0xFFFF8762;
 
   static const int mainBackgroundColor = miWhite;
 
@@ -219,7 +224,7 @@ class LamourICons {
   static const IconData LOCK =
       const IconData(0xe7c9, fontFamily: LamourICons.FONT_FAMILY);
   static const IconData FLOWER =
-      const IconData(0xe7d4, fontFamily: LamourICons.FONT_FAMILY);
+      const IconData(0xe65f, fontFamily: LamourICons.FONT_FAMILY);
   static const IconData CALENDAR =
       const IconData(0xe674, fontFamily: LamourICons.FONT_FAMILY);
   static const IconData FOOD =
