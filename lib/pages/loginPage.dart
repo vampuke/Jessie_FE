@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:jessie_wish/common/local/localStorage.dart';
 import 'package:jessie_wish/common/config/config.dart';
+import 'package:jessie_wish/common/service/annivService.dart';
+import 'package:jessie_wish/common/service/foodService.dart';
+import 'package:jessie_wish/common/service/voucherService.dart';
 import 'package:jessie_wish/common/style/style.dart';
 import 'package:jessie_wish/common/utils/navigatorUtils.dart';
 import 'package:jessie_wish/widget/inputWidget.dart';
@@ -115,6 +118,9 @@ class _LoginPageState extends State<LoginPage> {
                                   WishSvc.getWish(store).then((res) {
                                     if (res == true) {
                                       NavigatorUtils.goHome(context);
+                                      AnnivSvc.readAnniv(store);
+                                      FoodSvc.readFood(store);
+                                      VoucherSvc.readVoucher(store);
                                     }
                                   });
                                 }

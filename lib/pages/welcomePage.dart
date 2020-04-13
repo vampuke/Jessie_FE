@@ -59,7 +59,9 @@ class _WelcomePageState extends State<WelcomePage> {
       return _oneWord;
     }
     String oneWord = await LocalStorage.get(Config.ONE_WORD);
-    _oneWord = oneWord == null || oneWord.length == 0 ? '如果你爱上了某个星球的一朵花。那么，只要在夜晚仰望星空，就会觉得漫天的繁星就像一朵朵盛开的花。' : oneWord;
+    _oneWord = oneWord == null || oneWord.length == 0
+        ? '如果你爱上了某个星球的一朵花。那么，只要在夜晚仰望星空，就会觉得漫天的繁星就像一朵朵盛开的花。'
+        : oneWord;
     return _oneWord;
   }
 
@@ -68,7 +70,8 @@ class _WelcomePageState extends State<WelcomePage> {
       return _wordAuthor;
     }
     String wordAuthor = await LocalStorage.get(Config.WORD_AUTHOR);
-    _wordAuthor = wordAuthor == null || wordAuthor.length == 0 ? '小王子' : wordAuthor;
+    _wordAuthor =
+        wordAuthor == null || wordAuthor.length == 0 ? '小王子' : wordAuthor;
     return _wordAuthor;
   }
 
@@ -154,7 +157,6 @@ class _WelcomePageState extends State<WelcomePage> {
           ),
           floatingActionButton: FloatingActionButton(
             onPressed: _goToNext,
-            tooltip: 'Increment',
             elevation: 0,
             child: Icon(
               LamourICons.NEXT,

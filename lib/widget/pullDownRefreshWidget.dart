@@ -108,10 +108,11 @@ class _PullDownRefreshWidgetState extends State<PullDownRefreshWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (_scrollController.hasClients && _scrollController.offset != 0.0) {
-      _scrollController.animateTo(0.0,
-          duration: const Duration(milliseconds: 200), curve: Curves.easeOut);
-    }
+    // if (_scrollController.hasClients && _scrollController.offset != 0.0) {
+    //   print('scroll');
+    //   _scrollController.animateTo(0.0,
+    //       duration: const Duration(milliseconds: 200), curve: Curves.easeOut);
+    // }
     return new RefreshIndicator(
       ///GlobalKey，用户外部获取RefreshIndicator的State，做显示刷新
       key: refreshKey,
@@ -147,8 +148,8 @@ class _PullDownRefreshWidgetState extends State<PullDownRefreshWidget> {
             onPressed: () {},
             child: new Image(
                 image: new AssetImage(LamourICons.DEFAULT_USER_ICON),
-                width: 70.0,
-                height: 70.0),
+                width: 140.0,
+                height: 140.0),
           ),
           Container(
             child: Text("Empty", style: LamourConstant.normalText),
