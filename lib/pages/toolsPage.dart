@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jessie_wish/common/service/userService.dart';
@@ -10,12 +12,35 @@ class ToolsPage extends StatefulWidget {
   _ToolsPageState createState() => _ToolsPageState();
 }
 
-class _ToolsPageState extends State<ToolsPage> {
+class _ToolsPageState extends State<ToolsPage> with WidgetsBindingObserver {
   final List<String> entries = <String>["Food", "Flower"];
 
   final List<IconData> icons = <IconData>[LamourICons.FOOD, LamourICons.FLOWER];
 
   final List<int> colors = <int>[LamourColors.deleteRed, 0xFF4DB6AC];
+
+  bool _iconStatus = false;
+
+  Timer _timer;
+
+  _ToolsPageState() {
+    _animate();
+  }
+
+  void _animate() {
+    _timer = new Timer(const Duration(milliseconds: 400), () {
+      setState(() {
+        _iconStatus = !_iconStatus;
+        _animate();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer.cancel();
+  }
 
   void _navigateToPage(entry) {
     switch (entry) {
@@ -41,14 +66,6 @@ class _ToolsPageState extends State<ToolsPage> {
     );
   }
 
-  Widget forwardIcon = Container(
-    margin: EdgeInsets.only(right: 20.0),
-    child: Icon(
-      Icons.arrow_forward_ios,
-      color: Color(LamourColors.actionBlue),
-    ),
-  );
-
   Widget _toolsList(context, index) {
     return InkWell(
       onTap: () {
@@ -71,7 +88,16 @@ class _ToolsPageState extends State<ToolsPage> {
                 style: LamourConstant.largeText,
               ),
             ),
-            forwardIcon,
+            AnimatedContainer(
+              duration: Duration(seconds: 1),
+              curve: Curves.fastOutSlowIn,
+              width: _iconStatus ? 10 : 50,
+              margin: EdgeInsets.only(right: 20.0),
+              child: Icon(
+                Icons.arrow_forward_ios,
+                color: Color(LamourColors.actionBlue),
+              ),
+            ),
           ],
         ),
         padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
