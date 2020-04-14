@@ -135,8 +135,14 @@ class _FlowerPageState extends State<FlowerPage> with WidgetsBindingObserver {
               "  " +
               _flower.flowerLog[index].reason +
               "  " +
-              _flower.flowerLog[index].quantity.toString(),
-          style: LamourConstant.smallSubLightText,
+              (_flower.flowerLog[index].quantity > 0
+                  ? "+" + _flower.flowerLog[index].quantity.toString()
+                  : _flower.flowerLog[index].quantity.toString()),
+          style: TextStyle(
+              fontSize: 14.0,
+              color: Color((_flower.flowerLog[index].quantity > 0
+                  ? LamourColors.deleteRed
+                  : LamourColors.likeGreen))),
           textAlign: TextAlign.center,
         ),
       ),
