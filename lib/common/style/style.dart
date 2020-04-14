@@ -243,6 +243,8 @@ class LamourICons {
       const IconData(0xe666, fontFamily: LamourICons.FONT_FAMILY);
   static const IconData LOGIN_PW =
       const IconData(0xe60e, fontFamily: LamourICons.FONT_FAMILY);
+  static const IconData LOG_OUT =
+      const IconData(0xe608, fontFamily: LamourICons.FONT_FAMILY);
 
   static const IconData ISSUE_EDIT_H1 = Icons.filter_1;
   static const IconData ISSUE_EDIT_H2 = Icons.filter_2;

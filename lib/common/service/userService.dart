@@ -17,7 +17,11 @@ class UserSvc {
     Map requestParams = {"user_name": userName, "password": password};
 
     var res = await HttpManager.netFetch(
-        Address.userLogin(), requestParams, null, new Options(method: "post"));
+      Address.userLogin(),
+      requestParams,
+      null,
+      new Options(method: "post"),
+    );
     if (res != null && res.result) {
       if (res.data["code"] == null) {
         Fluttertoast.showToast(msg: "Success");
@@ -32,6 +36,21 @@ class UserSvc {
       }
     } else {
       return null;
+    }
+  }
+
+  static logOut() async {
+    var res = await HttpManager.netFetch(Address.logOut(), null, null, null);
+    if (res != null && res.result) {
+      if (res.data["code"] == 200) {
+        return true;
+      } else {
+        Fluttertoast.showToast(msg: res.data["msg"]);
+        return false;
+      }
+    } else {
+      Fluttertoast.showToast(msg: "Network error");
+      return false;
     }
   }
 

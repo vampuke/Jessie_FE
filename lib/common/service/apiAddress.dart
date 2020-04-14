@@ -7,6 +7,10 @@ class Address {
     return "${host}user/login";
   }
 
+  static logOut() {
+    return "${host}user/logout";
+  }
+
   static network() {
     return "${host}network";
   }
