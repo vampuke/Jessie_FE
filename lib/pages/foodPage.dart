@@ -98,6 +98,31 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
   }
 
   void _deleteFood(foodId) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text("Confirm delete?"),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text("Confirm"),
+              onPressed: () {
+                _deleteFoodWorker(foodId);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteFoodWorker(foodId) async {
     CommonUtils.showLoadingDialog(context);
     FoodSvc.deleteFood(_getStore(), foodId).then(
       (res) {
@@ -173,16 +198,20 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
           child: Container(
             padding: EdgeInsets.all(5.0),
             child: CupertinoSlidingSegmentedControl(
-                backgroundColor: Color(LamourColors.primaryValue),
-                thumbColor: Colors.white,
-                groupValue: _gender,
-                onValueChanged: (value) {
-                  setState(() {
-                    _gender = value;
-                    _filterFood();
-                  });
-                },
-                children: {"She": Text("She"), "He": Text("He")}),
+              backgroundColor: Color(LamourColors.primaryValue),
+              thumbColor: Colors.white,
+              groupValue: _gender,
+              onValueChanged: (value) {
+                setState(() {
+                  _gender = value;
+                  _filterFood();
+                });
+              },
+              children: {
+                "She": Text("She"),
+                "He": Text("He"),
+              },
+            ),
           ),
         )
       ],
@@ -194,16 +223,20 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
           child: Container(
             padding: EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
             child: CupertinoSlidingSegmentedControl(
-                backgroundColor: Color(LamourColors.primaryValue),
-                thumbColor: Colors.white,
-                groupValue: _type,
-                onValueChanged: (value) {
-                  setState(() {
-                    _type = value;
-                    _filterFood();
-                  });
-                },
-                children: {"Like": Text("Like"), "Dislike": Text("Dislike")}),
+              backgroundColor: Color(LamourColors.primaryValue),
+              thumbColor: Colors.white,
+              groupValue: _type,
+              onValueChanged: (value) {
+                setState(() {
+                  _type = value;
+                  _filterFood();
+                });
+              },
+              children: {
+                "Like": Text("Like"),
+                "Dislike": Text("Dislike"),
+              },
+            ),
           ),
         )
       ],

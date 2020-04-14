@@ -103,32 +103,35 @@ class _VoucherPageState extends State<VoucherPage>
       User.User _currentUser = _getStore().state.userInfo;
       if (_currentUser.role == 1) {
         showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: new Text("Confirm redeem?"),
-                actions: <Widget>[
-                  FlatButton(
-                      onPressed: () {
+          context: context,
+          builder: (BuildContext context) {
+            return CupertinoAlertDialog(
+              title: new Text("Confirm redeem?"),
+              actions: <Widget>[
+                CupertinoDialogAction(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text("Cancel")),
+                CupertinoDialogAction(
+                  onPressed: () {
+                    CommonUtils.showLoadingDialog(context);
+                    VoucherSvc.redeemVoucher(_getStore(), voucher.id).then(
+                      (res) {
                         Navigator.pop(context);
-                      },
-                      child: Text("Cancel")),
-                  FlatButton(
-                      onPressed: () {
-                        CommonUtils.showLoadingDialog(context);
-                        VoucherSvc.redeemVoucher(_getStore(), voucher.id)
-                            .then((res) {
+                        if (res == true) {
                           Navigator.pop(context);
-                          if (res == true) {
-                            Navigator.pop(context);
-                            handleRefresh();
-                          }
-                        });
+                          handleRefresh();
+                        }
                       },
-                      child: Text("Yes"))
-                ],
-              );
-            });
+                    );
+                  },
+                  child: Text("Yes"),
+                ),
+              ],
+            );
+          },
+        );
       } else {
         Fluttertoast.showToast(msg: "Permission denied");
       }
