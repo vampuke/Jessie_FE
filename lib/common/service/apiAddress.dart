@@ -43,6 +43,10 @@ class Address {
     return "${host}anniv";
   }
 
+  static flower() {
+    return "${host}flower";
+  }
+
   static getPageParams(tab, page, [pageSize = Config.PAGE_SIZE]) {
     if (page != null) {
       if (pageSize != null) {

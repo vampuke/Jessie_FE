@@ -38,7 +38,6 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
   void didChangeDependencies() {
     _foodList = _getStore().state.foodList.food;
     _updateFoodList();
-    print(_foodList);
     _filterFood();
     super.didChangeDependencies();
   }

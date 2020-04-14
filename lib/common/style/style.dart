@@ -20,13 +20,13 @@ class LamourColors {
   static const int miWhite = 0xffececec;
   static const int white = 0xFFFFFFFF;
   static const int actionBlue = 0xff267aff;
-  static const int deleteRed = 0xFFD81E06;
+  static const int deleteRed = 0xFFFF4D4F;
   static const int subTextColor = 0xff959595;
   static const int subLightTextColor = 0xffc4c4c4;
   static const int lightGray = 0xFFE0E0E0;
   static const int likeGreen = 0xFF00C853;
   static const int dislikeRed = 0xFFFF6D00;
-  static const int actionGreen = 0xFF00B483;
+  static const int actionGreen = 0xFF1890FF;
   static const int happyOrange = 0xFFFF8762;
 
   static const int mainBackgroundColor = miWhite;
