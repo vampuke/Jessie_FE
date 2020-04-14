@@ -141,45 +141,63 @@ class _AnnivPageState extends State<AnnivPage>
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, state) {
-            return AlertDialog(
+            return CupertinoAlertDialog(
               title: new Text("Add new anniversary"),
               content: new Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  InkWell(
-                      onTap: () {
+                  // InkWell(
+                  //   onTap: () {
+                  //     _selectDate(state);
+                  //   },
+                  //   child: Container(
+                  //     child: Text(
+                  //       DateFormat.yMMMd().format(_selectedDate),
+                  //     ),
+                  //     margin: EdgeInsets.only(top: 6.0, bottom: 6.0),
+                  //     padding: EdgeInsets.only(
+                  //         top: 6.0, bottom: 6.0, left: 40.0, right: 40.0),
+                  //     decoration: BoxDecoration(
+                  //       border: new Border.all(
+                  //         width: 1.0,
+                  //         color: Color(LamourColors.subLightTextColor),
+                  //       ),
+                  //       borderRadius: new BorderRadius.all(
+                  //         new Radius.circular(5.0),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  Container(
+                    margin: EdgeInsets.only(top: 20.0, bottom: 20.0),
+                    child: CupertinoButton(
+                      onPressed: () {
                         _selectDate(state);
                       },
-                      child: Container(
-                        child: Text(DateFormat.yMMMd().format(_selectedDate)),
-                        margin: EdgeInsets.only(top: 6.0, bottom: 6.0),
-                        padding: EdgeInsets.only(
-                            top: 6.0, bottom: 6.0, left: 40.0, right: 40.0),
-                        decoration: BoxDecoration(
-                          border: new Border.all(
-                              width: 1.0,
-                              color: Color(LamourColors.subLightTextColor)),
-                          borderRadius:
-                              new BorderRadius.all(new Radius.circular(5.0)),
-                        ),
-                      )),
-                  new TextField(
+                      color: Colors.white,
+                      child: Text(
+                        DateFormat.yMMMd().format(_selectedDate),
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  new CupertinoTextField(
                     controller: annivController,
                     onChanged: (String value) {
                       _newAnniv = value;
                     },
                     maxLines: 2,
-                    decoration: new InputDecoration(hintText: "Event"),
+                    placeholder: "Event",
                   ),
                 ],
               ),
               actions: <Widget>[
-                FlatButton(
+                CupertinoDialogAction(
                     onPressed: () {
                       Navigator.pop(context);
                     },
                     child: Text("Cancel")),
-                FlatButton(onPressed: _addAnniv, child: Text("Add")),
+                CupertinoDialogAction(onPressed: _addAnniv, child: Text("Add")),
               ],
             );
           },

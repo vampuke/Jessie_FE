@@ -15,20 +15,23 @@ class HomePage extends StatelessWidget {
   // Exit app tip
   Future<bool> _dialogExitApp(BuildContext context) {
     return showDialog(
-        context: context,
-        builder: (context) => new AlertDialog(
-              content: new Text("Confirm to exit app?"),
-              actions: <Widget>[
-                new FlatButton(
-                    onPressed: () => Navigator.of(context).pop(false),
-                    child: new Text("Cancel")),
-                new FlatButton(
-                    onPressed: () {
-                      Navigator.of(context).pop(true);
-                    },
-                    child: new Text("Yes"))
-              ],
-            ));
+      context: context,
+      builder: (context) => new CupertinoAlertDialog(
+        content: new Text("Confirm to exit app?"),
+        actions: <Widget>[
+          new CupertinoDialogAction(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: new Text("Cancel"),
+          ),
+          new CupertinoDialogAction(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: new Text("Yes"),
+          ),
+        ],
+      ),
+    );
   }
 
   _renderTab(icon, text) {

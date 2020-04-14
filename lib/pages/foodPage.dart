@@ -142,28 +142,25 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
       builder: (BuildContext context) {
         return StatefulBuilder(
           builder: (context, state) {
-            return AlertDialog(
+            return CupertinoAlertDialog(
               title: new Text(_gender + " " + _type.toLowerCase()),
-              content: new Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  new TextField(
-                    controller: foodController,
-                    onChanged: (String value) {
-                      _newFood = value;
-                    },
-                    decoration:
-                        new InputDecoration(hintText: "Input food name"),
-                  ),
-                ],
+              content: Container(
+                margin: EdgeInsets.only(top: 20),
+                child: new CupertinoTextField(
+                  controller: foodController,
+                  onChanged: (String value) {
+                    _newFood = value;
+                  },
+                  placeholder: "Input food name",
+                ),
               ),
               actions: <Widget>[
-                FlatButton(
+                CupertinoDialogAction(
                     onPressed: () {
                       Navigator.pop(context);
                     },
                     child: Text("Cancel")),
-                FlatButton(onPressed: _addFood, child: Text("Add")),
+                CupertinoDialogAction(onPressed: _addFood, child: Text("Add")),
               ],
             );
           },

@@ -154,39 +154,44 @@ class _VoucherPageState extends State<VoucherPage>
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
-                        return AlertDialog(
+                        return CupertinoAlertDialog(
                           title: new Text("Add new voucher"),
-                          content: new TextField(
-                            controller: voucherController,
-                            onChanged: (String value) {
-                              _newVoucher = value;
-                            },
-                            decoration: new InputDecoration(
-                                hintText: "Reason(optional)"),
+                          content: Container(
+                            margin: EdgeInsets.only(top: 20.0),
+                            child: new CupertinoTextField(
+                              controller: voucherController,
+                              onChanged: (String value) {
+                                _newVoucher = value;
+                              },
+                              placeholder: "Reason(optional)",
+                            ),
                           ),
                           actions: <Widget>[
-                            FlatButton(
+                            CupertinoDialogAction(
                                 onPressed: () {
                                   Navigator.pop(context);
                                 },
                                 child: Text("Cancel")),
-                            FlatButton(
-                                onPressed: () async {
-                                  CommonUtils.showLoadingDialog(context);
-                                  VoucherSvc.addNewVoucher(
-                                          _getStore(),
-                                          _newVoucher,
-                                          _getStore().state.userInfo.userId)
-                                      .then((res) {
+                            CupertinoDialogAction(
+                              onPressed: () async {
+                                CommonUtils.showLoadingDialog(context);
+                                VoucherSvc.addNewVoucher(
+                                        _getStore(),
+                                        _newVoucher,
+                                        _getStore().state.userInfo.userId)
+                                    .then(
+                                  (res) {
                                     Navigator.pop(context);
                                     if (res == true) {
                                       _newVoucher = "";
                                       Navigator.pop(context);
                                       handleRefresh();
                                     }
-                                  });
-                                },
-                                child: Text("Add")),
+                                  },
+                                );
+                              },
+                              child: Text("Add"),
+                            ),
                           ],
                         );
                       },

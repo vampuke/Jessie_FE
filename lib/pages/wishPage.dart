@@ -205,24 +205,26 @@ class _WishPageState extends State<WishPage>
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
-                      return AlertDialog(
+                      return CupertinoAlertDialog(
                         title: new Text("Add new wish"),
-                        content: new TextField(
-                          controller: wishController,
-                          onChanged: (String value) {
-                            _newWish = value;
-                          },
-                          maxLines: 5,
-                          decoration:
-                              new InputDecoration(hintText: "Input your wish"),
+                        content: Container(
+                          margin: EdgeInsets.only(top: 25.0),
+                          child: new CupertinoTextField(
+                            controller: wishController,
+                            onChanged: (String value) {
+                              _newWish = value;
+                            },
+                            maxLines: 5,
+                            placeholder: "Input your wish",
+                          ),
                         ),
                         actions: <Widget>[
-                          FlatButton(
+                          CupertinoDialogAction(
                               onPressed: () {
                                 Navigator.pop(context);
                               },
                               child: Text("Cancel")),
-                          FlatButton(
+                          CupertinoDialogAction(
                             onPressed: () async {
                               if (_newWish == null ||
                                   _newWish.trim().length == 0) {
