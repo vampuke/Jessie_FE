@@ -47,6 +47,26 @@ class FoodSvc {
     }
   }
 
+  static deleteFood(store, int foodId) async {
+    var res = await HttpManager.netFetch(
+        Address.deleteFood() + foodId.toString(),
+        null,
+        null,
+        new Options(method: "delete"));
+    if (res != null && res.result) {
+      if (res.data["code"] == 200) {
+        Fluttertoast.showToast(msg: "Success");
+        return true;
+      } else {
+        Fluttertoast.showToast(msg: res.data["msg"]);
+        return false;
+      }
+    } else {
+      Fluttertoast.showToast(msg: "Network error");
+      return false;
+    }
+  }
+
   static readFood(store) async {
     var foodListText = await LocalStorage.get(Config.FOOD_LIST);
     if (foodListText != null) {

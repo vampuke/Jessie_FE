@@ -17,9 +17,11 @@ class PullDownRefreshWidget extends StatefulWidget {
 
   final Key refreshKey;
 
+  final double topPadding;
+
   PullDownRefreshWidget(
       this.control, this.itemBuilder, this.onRefresh, this.onLoadMore,
-      {this.refreshKey});
+      {this.refreshKey, this.topPadding});
 
   @override
   _PullDownRefreshWidgetState createState() => _PullDownRefreshWidgetState(
@@ -27,7 +29,8 @@ class PullDownRefreshWidget extends StatefulWidget {
       this.itemBuilder,
       this.onRefresh,
       this.onLoadMore,
-      this.refreshKey);
+      this.refreshKey,
+      this.topPadding);
 }
 
 class _PullDownRefreshWidgetState extends State<PullDownRefreshWidget> {
@@ -39,10 +42,12 @@ class _PullDownRefreshWidgetState extends State<PullDownRefreshWidget> {
 
   final Key refreshKey;
 
+  final double topPadding;
+
   PullDownRefreshWidgetControl control;
 
   _PullDownRefreshWidgetState(this.control, this.itemBuilder, this.onRefresh,
-      this.onLoadMore, this.refreshKey);
+      this.onLoadMore, this.refreshKey, this.topPadding);
 
   final ScrollController _scrollController = new ScrollController();
 
@@ -120,6 +125,7 @@ class _PullDownRefreshWidgetState extends State<PullDownRefreshWidget> {
       ///下拉刷新触发，返回的是一个Future
       onRefresh: onRefresh,
       child: new ListView.builder(
+        padding: EdgeInsets.only(top: topPadding == null ? 0.0 : topPadding),
         ///保持ListView任何情况都能滚动，解决在RefreshIndicator的兼容问题。
         physics: const AlwaysScrollableScrollPhysics(),
 

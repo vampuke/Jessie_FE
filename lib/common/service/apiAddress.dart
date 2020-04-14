@@ -31,6 +31,10 @@ class Address {
     return "${host}food";
   }
 
+  static deleteFood() {
+    return "${host}food/delete/";
+  }
+
   static anniv() {
     return "${host}anniv";
   }

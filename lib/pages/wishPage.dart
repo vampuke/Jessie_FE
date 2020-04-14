@@ -77,11 +77,13 @@ class _WishPageState extends State<WishPage>
     isLoading = true;
     Store _store = _getStore();
     bool _result = await WishSvc.getWish(_store);
-    setState(() {
-      if (_result) {
-        updateWishList();
-      }
-    });
+    setState(
+      () {
+        if (_result) {
+          updateWishList();
+        }
+      },
+    );
     isLoading = false;
     return null;
   }
@@ -111,10 +113,12 @@ class _WishPageState extends State<WishPage>
 
   _renderEventItem(Wish wish) {
     WishViewModel eventViewModel = WishViewModel.fromWishMap(wish);
-    return new WishItem(eventViewModel, onPressed: () {
-      User.User _currentUser = _getStore().state.userInfo;
-      if (wish.userId == _currentUser.userId || _currentUser.role == 1) {
-        showModalBottomSheet(
+    return new WishItem(
+      eventViewModel,
+      onPressed: () {
+        User.User _currentUser = _getStore().state.userInfo;
+        if (wish.userId == _currentUser.userId || _currentUser.role == 1) {
+          showModalBottomSheet(
             context: context,
             builder: (BuildContext context) {
               return new Column(
@@ -130,13 +134,15 @@ class _WishPageState extends State<WishPage>
                       CommonUtils.showLoadingDialog(context);
                       int status = wish.status == 1 ? 3 : 1;
                       WishSvc.updateWishStatus(_getStore(), wish.id, status)
-                          .then((res) {
-                        Navigator.pop(context);
-                        if (res == true) {
+                          .then(
+                        (res) {
                           Navigator.pop(context);
-                          handleRefresh();
-                        }
-                      });
+                          if (res == true) {
+                            Navigator.pop(context);
+                            handleRefresh();
+                          }
+                        },
+                      );
                     },
                   ),
                   new ListTile(
@@ -147,22 +153,26 @@ class _WishPageState extends State<WishPage>
                     title: new Text("Delete"),
                     onTap: () async {
                       CommonUtils.showLoadingDialog(context);
-                      WishSvc.deleteWish(_getStore(), wish.id).then((res) {
-                        Navigator.pop(context);
-                        if (res == true) {
+                      WishSvc.deleteWish(_getStore(), wish.id).then(
+                        (res) {
                           Navigator.pop(context);
-                          handleRefresh();
-                        }
-                      });
+                          if (res == true) {
+                            Navigator.pop(context);
+                            handleRefresh();
+                          }
+                        },
+                      );
                     },
                   )
                 ],
               );
-            });
-      } else {
-        Fluttertoast.showToast(msg: "Permission denied");
-      }
-    });
+            },
+          );
+        } else {
+          Fluttertoast.showToast(msg: "Permission denied");
+        }
+      },
+    );
   }
 
   @override
@@ -171,84 +181,88 @@ class _WishPageState extends State<WishPage>
     return new StoreBuilder<LamourState>(
       builder: (context, store) {
         return new Scaffold(
-            appBar: new AppBar(
-              backgroundColor: Theme.of(context).primaryColor,
-              actions: <Widget>[
-                new Container(
-                  child: new CupertinoSwitch(
-                    value: switchType,
-                    onChanged: (bool value) {
-                      setState(() {
+          appBar: new AppBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            actions: <Widget>[
+              new Container(
+                child: new CupertinoSwitch(
+                  value: switchType,
+                  onChanged: (bool value) {
+                    setState(
+                      () {
                         switchType = value;
                         currentStatus = switchType == false ? 1 : 3;
                         updateWishList();
-                      });
-                    },
-                  ),
-                ),
-                new IconButton(
-                  onPressed: () {
-                    _newWish = "";
-                    wishController.value = new TextEditingValue(text: "");
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: new Text("Add new wish"),
-                          content: new TextField(
-                            controller: wishController,
-                            onChanged: (String value) {
-                              _newWish = value;
-                            },
-                            maxLines: 5,
-                            decoration: new InputDecoration(
-                              hintText: "Input your wish"
-                            ),
-                          ),
-                          actions: <Widget>[
-                            FlatButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text("Cancel")),
-                            FlatButton(
-                                onPressed: () async {
-                                  if (_newWish == null ||
-                                      _newWish.trim().length == 0) {
-                                    return;
-                                  }
-                                  CommonUtils.showLoadingDialog(context);
-                                  WishSvc.addWish(_getStore(), _newWish)
-                                      .then((res) {
-                                    Navigator.pop(context);
-                                    if (res == true) {
-                                      _newWish = "";
-                                      Navigator.pop(context);
-                                      handleRefresh();
-                                    }
-                                  });
-                                },
-                                child: Text("Add")),
-                          ],
-                        );
                       },
                     );
                   },
-                  icon: new Icon(
-                    Icons.add,
-                    size: 30.0,
-                  ),
                 ),
-              ],
-            ),
-            body: PullDownRefreshWidget(
-              pullDownRefreshWidgetControl,
-              (BuildContext context, int index) => _renderEventItem(
-                  pullDownRefreshWidgetControl.dataList[index]),
-              handleRefresh,
-              onLoadMore,
-              refreshKey: refreshIndicatorKey,
-            ));
+              ),
+              new IconButton(
+                onPressed: () {
+                  _newWish = "";
+                  wishController.value = new TextEditingValue(text: "");
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: new Text("Add new wish"),
+                        content: new TextField(
+                          controller: wishController,
+                          onChanged: (String value) {
+                            _newWish = value;
+                          },
+                          maxLines: 5,
+                          decoration:
+                              new InputDecoration(hintText: "Input your wish"),
+                        ),
+                        actions: <Widget>[
+                          FlatButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text("Cancel")),
+                          FlatButton(
+                            onPressed: () async {
+                              if (_newWish == null ||
+                                  _newWish.trim().length == 0) {
+                                return;
+                              }
+                              CommonUtils.showLoadingDialog(context);
+                              WishSvc.addWish(_getStore(), _newWish).then(
+                                (res) {
+                                  Navigator.pop(context);
+                                  if (res == true) {
+                                    _newWish = "";
+                                    Navigator.pop(context);
+                                    handleRefresh();
+                                  }
+                                },
+                              );
+                            },
+                            child: Text("Add"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                icon: new Icon(
+                  Icons.add,
+                  size: 30.0,
+                ),
+              ),
+            ],
+          ),
+          body: PullDownRefreshWidget(
+            pullDownRefreshWidgetControl,
+            (BuildContext context, int index) =>
+                _renderEventItem(pullDownRefreshWidgetControl.dataList[index]),
+            handleRefresh,
+            onLoadMore,
+            refreshKey: refreshIndicatorKey,
+          ),
+        );
       },
     );
   }

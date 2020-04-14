@@ -44,13 +44,15 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
   }
 
   void _filterFood() {
-    setState(() {
-      int foodType = _type == "Like" ? 1 : 2;
-      int userId = _gender == "He" ? 1 : 2;
-      _filteredList = _foodList
-          .where((food) => (food.type == foodType && food.userId == userId))
-          .toList();
-    });
+    setState(
+      () {
+        int foodType = _type == "Like" ? 1 : 2;
+        int userId = _gender == "He" ? 1 : 2;
+        _filteredList = _foodList
+            .where((food) => (food.type == foodType && food.userId == userId))
+            .toList();
+      },
+    );
   }
 
   List<Widget> _renderFood() {
@@ -59,7 +61,7 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
     print(_filteredList);
     if (_filteredList != null) {
       for (var food in _filteredList) {
-        foodList.add(foodItem(food.foodName));
+        foodList.add(foodItem(food.foodName, food.id));
       }
     }
     foodList.add(Container());
@@ -71,10 +73,12 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
     Store store = _getStore();
     var res = await FoodSvc.getFoodList(store);
     if (res) {
-      setState(() {
-        _foodList = store.state.foodList.food;
-        _filterFood();
-      });
+      setState(
+        () {
+          _foodList = store.state.foodList.food;
+          _filterFood();
+        },
+      );
     }
   }
 
@@ -82,14 +86,28 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
     CommonUtils.showLoadingDialog(context);
     int foodType = _type == "Like" ? 1 : 2;
     int userId = _gender == "He" ? 1 : 2;
-    FoodSvc.addFood(_getStore(), _newFood, foodType, userId).then((res) {
-      Navigator.pop(context);
-      if (res == true) {
-        _newFood = "";
+    FoodSvc.addFood(_getStore(), _newFood, foodType, userId).then(
+      (res) {
         Navigator.pop(context);
-        _updateFoodList();
-      }
-    });
+        if (res == true) {
+          _newFood = "";
+          Navigator.pop(context);
+          _updateFoodList();
+        }
+      },
+    );
+  }
+
+  void _deleteFood(foodId) async {
+    CommonUtils.showLoadingDialog(context);
+    FoodSvc.deleteFood(_getStore(), foodId).then(
+      (res) {
+        Navigator.pop(context);
+        if (res == true) {
+          _updateFoodList();
+        }
+      },
+    );
   }
 
   void _addFoodDialog() {
@@ -98,8 +116,9 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return StatefulBuilder(builder: (context, state) {
-          return AlertDialog(
+        return StatefulBuilder(
+          builder: (context, state) {
+            return AlertDialog(
               title: new Text(_gender + " " + _type.toLowerCase()),
               content: new Column(
                 mainAxisSize: MainAxisSize.min,
@@ -121,13 +140,15 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
                     },
                     child: Text("Cancel")),
                 FlatButton(onPressed: _addFood, child: Text("Add")),
-              ]);
-        });
+              ],
+            );
+          },
+        );
       },
     );
   }
 
-  Widget foodItem(foodName) {
+  Widget foodItem(foodName, foodId) {
     return Chip(
       backgroundColor: Color(
           _type == "Like" ? LamourColors.likeGreen : LamourColors.dislikeRed),
@@ -135,6 +156,13 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
       labelStyle: TextStyle(
         color: Colors.white,
       ),
+      deleteIcon: Icon(
+        LamourICons.Delete,
+        color: Colors.white,
+      ),
+      onDeleted: () {
+        _deleteFood(foodId);
+      },
     );
   }
 
