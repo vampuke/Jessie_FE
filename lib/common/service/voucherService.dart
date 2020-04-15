@@ -30,8 +30,8 @@ class VoucherSvc {
     }
   }
 
-  static addNewVoucher(store, String title, int userId) async {
-    Map requestParams = {"title": title, "user_id": userId};
+  static addNewVoucher(store, String title, int userId, int duration, int quantity) async {
+    Map requestParams = {"title": title, "user_id": userId, "duration": duration, "quantity": quantity};
     var res = await HttpManager.netFetch(
         Address.addVoucher(), requestParams, null, new Options(method: "post"));
     if (res != null && res.result) {

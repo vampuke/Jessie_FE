@@ -23,11 +23,19 @@ class _VoucherPageState extends State<VoucherPage>
         AutomaticKeepAliveClientMixin<VoucherPage>,
         ListState<VoucherPage>,
         WidgetsBindingObserver {
-  int _index = 0;
+  int _duration = 1;
+
+  int _quantity = 1;
+
+  double _sliderValue = 1.0;
+
+  String _gender = "She";
 
   String _newVoucher = "";
 
   final TextEditingController voucherController = new TextEditingController();
+
+  final TextEditingController quantityController = new TextEditingController();
 
   @override
   bool get wantKeepAlive => true;
@@ -86,8 +94,19 @@ class _VoucherPageState extends State<VoucherPage>
 
   void getVoucherList() {
     setState(() {
-      pullDownRefreshWidgetControl.dataList =
-          _getStore().state.voucherList?.voucher ??= [];
+      // pullDownRefreshWidgetControl.dataList =
+      //     _getStore().state.voucherList?.voucher ??= [];
+      Store store = _getStore();
+      if (store.state.voucherList != null &&
+          store.state.voucherList.voucher != null) {
+        int userId = _gender == "She" ? 2 : 1;
+        pullDownRefreshWidgetControl.dataList = store.state.voucherList.voucher
+            .where((Voucher voucher) => (voucher.userId == userId))
+            .toList();
+        print(pullDownRefreshWidgetControl.dataList);
+      } else {
+        pullDownRefreshWidgetControl.dataList = [];
+      }
     });
   }
 
@@ -98,16 +117,178 @@ class _VoucherPageState extends State<VoucherPage>
     return StoreProvider.of(context);
   }
 
+  void _redeemVoucher(Voucher voucher) {
+    CommonUtils.showLoadingDialog(context);
+    VoucherSvc.redeemVoucher(_getStore(), voucher.id).then(
+      (res) {
+        Navigator.pop(context);
+        if (res == true) {
+          Navigator.pop(context);
+          handleRefresh();
+        }
+      },
+    );
+  }
+
+  void _addVoucherWorker() async {
+    int userId = _gender == "She" ? 2 : 1;
+    CommonUtils.showLoadingDialog(context);
+    VoucherSvc.addNewVoucher(
+            _getStore(), _newVoucher, userId, _duration, _quantity)
+        .then(
+      (res) {
+        Navigator.pop(context);
+        if (res == true) {
+          _newVoucher = "";
+          Navigator.pop(context);
+          handleRefresh();
+        }
+      },
+    );
+  }
+
+  _redeemDialog(Voucher voucher) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: new Text("Confirm redeem?"),
+          actions: <Widget>[
+            CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancel")),
+            CupertinoDialogAction(
+              onPressed: () {
+                _redeemVoucher(voucher);
+              },
+              child: Text("Yes"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   _renderEventItem(Voucher voucher) {
     VoucherViewModel eventViewModel = VoucherViewModel.fromVoucherMap(voucher);
     return new VoucherItem(eventViewModel, onPressed: () {
       User.User _currentUser = _getStore().state.userInfo;
       if (_currentUser.role == 1) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
+        _redeemDialog(voucher);
+      } else {
+        Fluttertoast.showToast(msg: "Permission denied");
+      }
+    });
+  }
+
+  void _addVoucher() {
+    int userId = _gender == "She" ? 2 : 1;
+    if (_getStore().state.userInfo.userId == userId &&
+        _getStore().state.userInfo.role != 1) {
+      Fluttertoast.showToast(msg: "Permission denied");
+      return;
+    }
+    _newVoucher = "";
+    voucherController.value = new TextEditingValue(text: "");
+    quantityController.value = new TextEditingValue(text: '1');
+    _sliderValue = 1.0;
+    _duration = 1;
+    _quantity = 1;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, state) {
             return CupertinoAlertDialog(
-              title: new Text("Confirm redeem?"),
+              title: new Text("Add new voucher"),
+              content: Container(
+                margin: EdgeInsets.only(top: 20.0),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            child: Text(_sliderValue == 0.0
+                                ? "Infinite"
+                                : _sliderValue.toStringAsFixed(0) + " Month"),
+                          ),
+                          CupertinoSlider(
+                            value: _sliderValue,
+                            max: 3.0,
+                            min: 0.0,
+                            divisions: 3,
+                            onChanged: (value) {
+                              state(() {
+                                _sliderValue = value;
+                              });
+                              _duration =
+                                  int.parse(_sliderValue.toStringAsFixed(0));
+                              print(value);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                    ),
+                    Container(
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            width: 60,
+                            child: Text(
+                              "Name: ",
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          Expanded(
+                            child: new CupertinoTextField(
+                              decoration:
+                                  LamourConstant.defaultRoundedBorderDecoration,
+                              controller: voucherController,
+                              onChanged: (String value) {
+                                _newVoucher = value;
+                              },
+                              placeholder: "Reason(optional)",
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.all(10),
+                    ),
+                    Container(
+                      child: Row(
+                        children: <Widget>[
+                          Container(
+                            width: 60,
+                            child: Text(
+                              "Quantity: ",
+                              textAlign: TextAlign.left,
+                            ),
+                          ),
+                          Expanded(
+                            child: new CupertinoTextField(
+                              keyboardType: TextInputType.number,
+                              decoration:
+                                  LamourConstant.defaultRoundedBorderDecoration,
+                              controller: quantityController,
+                              onChanged: (value) {
+                                _quantity = int.parse(value);
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
               actions: <Widget>[
                 CupertinoDialogAction(
                     onPressed: () {
@@ -115,28 +296,15 @@ class _VoucherPageState extends State<VoucherPage>
                     },
                     child: Text("Cancel")),
                 CupertinoDialogAction(
-                  onPressed: () {
-                    CommonUtils.showLoadingDialog(context);
-                    VoucherSvc.redeemVoucher(_getStore(), voucher.id).then(
-                      (res) {
-                        Navigator.pop(context);
-                        if (res == true) {
-                          Navigator.pop(context);
-                          handleRefresh();
-                        }
-                      },
-                    );
-                  },
-                  child: Text("Yes"),
+                  onPressed: _addVoucherWorker,
+                  child: Text("Add"),
                 ),
               ],
             );
           },
         );
-      } else {
-        Fluttertoast.showToast(msg: "Permission denied");
-      }
-    });
+      },
+    );
   }
 
   @override
@@ -145,75 +313,44 @@ class _VoucherPageState extends State<VoucherPage>
     return new StoreBuilder<LamourState>(
       builder: (context, store) {
         return new Scaffold(
-            appBar: new AppBar(
-              backgroundColor: Theme.of(context).primaryColor,
-              actions: <Widget>[
-                new IconButton(
-                  onPressed: () {
-                    _newVoucher = "";
-                    voucherController.value = new TextEditingValue(text: "");
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return CupertinoAlertDialog(
-                          title: new Text("Add new voucher"),
-                          content: Container(
-                            margin: EdgeInsets.only(top: 20.0),
-                            child: new CupertinoTextField(
-                              decoration: LamourConstant.defaultRoundedBorderDecoration,
-                              controller: voucherController,
-                              onChanged: (String value) {
-                                _newVoucher = value;
-                              },
-                              placeholder: "Reason(optional)",
-                            ),
-                          ),
-                          actions: <Widget>[
-                            CupertinoDialogAction(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text("Cancel")),
-                            CupertinoDialogAction(
-                              onPressed: () async {
-                                CommonUtils.showLoadingDialog(context);
-                                VoucherSvc.addNewVoucher(
-                                        _getStore(),
-                                        _newVoucher,
-                                        _getStore().state.userInfo.userId)
-                                    .then(
-                                  (res) {
-                                    Navigator.pop(context);
-                                    if (res == true) {
-                                      _newVoucher = "";
-                                      Navigator.pop(context);
-                                      handleRefresh();
-                                    }
-                                  },
-                                );
-                              },
-                              child: Text("Add"),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                  icon: new Icon(
-                    Icons.add,
-                    size: 30.0,
-                  ),
-                ),
-              ],
+          // backgroundColor: Color(LamourColors.lightGray),
+          appBar: new AppBar(
+            backgroundColor: Theme.of(context).primaryColor,
+            centerTitle: true,
+            title: CupertinoSlidingSegmentedControl(
+              backgroundColor: Color(LamourColors.primaryValue),
+              thumbColor: Colors.white,
+              groupValue: _gender,
+              onValueChanged: (value) {
+                setState(() {
+                  _gender = value;
+                  getVoucherList();
+                });
+              },
+              children: {
+                "She": Text("She"),
+                "He": Text("He"),
+              },
             ),
-            body: PullDownRefreshWidget(
-              pullDownRefreshWidgetControl,
-              (BuildContext context, int index) => _renderEventItem(
-                  pullDownRefreshWidgetControl.dataList[index]),
-              handleRefresh,
-              onLoadMore,
-              refreshKey: refreshIndicatorKey,
-            ));
+            actions: <Widget>[
+              new IconButton(
+                onPressed: _addVoucher,
+                icon: new Icon(
+                  Icons.add,
+                  size: 30.0,
+                ),
+              ),
+            ],
+          ),
+          body: PullDownRefreshWidget(
+            pullDownRefreshWidgetControl,
+            (BuildContext context, int index) =>
+                _renderEventItem(pullDownRefreshWidgetControl.dataList[index]),
+            handleRefresh,
+            onLoadMore,
+            refreshKey: refreshIndicatorKey,
+          ),
+        );
       },
     );
   }

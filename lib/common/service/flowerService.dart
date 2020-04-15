@@ -26,7 +26,7 @@ class FlowerSvc {
         Address.flower(), requestParams, null, new Options(method: "post"));
     if (res != null && res.result) {
       if (res.data["code"] == 200) {
-        Fluttertoast.showToast(msg: "Success");
+        Fluttertoast.showToast(msg: quantity > 0 ? "Thank you for your generous gift!!" : "花花又少了  哭哭");
         return true;
       } else {
         Fluttertoast.showToast(msg: res.data["msg"]);

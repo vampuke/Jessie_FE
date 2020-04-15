@@ -30,6 +30,9 @@ part 'voucher_list.g.dart';
   @JsonKey(name: 'datetime_create')
   int datetimeCreate;
 
+  @JsonKey(name: 'datetime_close')
+  int datetimeClose;
+
   @JsonKey(name: 'datetime_expire')
   int datetimeExpire;
 
@@ -42,10 +45,16 @@ part 'voucher_list.g.dart';
   @JsonKey(name: 'user_id')
   int userId;
 
+  @JsonKey(name: 'type')
+  int type;
+
+  @JsonKey(name: 'quantity')
+  int quantity;
+
   @JsonKey(name: 'user')
   User user;
 
-  Voucher(this.id,this.title,this.datetimeCreate,this.datetimeExpire,this.status,this.isDelete,this.userId,this.user,);
+  Voucher(this.id,this.title,this.datetimeCreate,this.datetimeClose,this.datetimeExpire,this.status,this.isDelete,this.userId,this.type,this.quantity,this.user,);
 
   factory Voucher.fromJson(Map<String, dynamic> srcJson) => _$VoucherFromJson(srcJson);
 
@@ -66,7 +75,10 @@ part 'voucher_list.g.dart';
   @JsonKey(name: 'role')
   int role;
 
-  User(this.userId,this.userName,this.role,);
+  @JsonKey(name: 'flower')
+  int flower;
+
+  User(this.userId,this.userName,this.role,this.flower,);
 
   factory User.fromJson(Map<String, dynamic> srcJson) => _$UserFromJson(srcJson);
 
