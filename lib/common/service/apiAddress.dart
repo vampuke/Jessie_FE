@@ -43,6 +43,10 @@ class Address {
     return "${host}anniv";
   }
 
+  static update() {
+    return "${host}update";
+  }
+
   static flower() {
     return "${host}flower";
   }
