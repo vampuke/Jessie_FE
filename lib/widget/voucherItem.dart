@@ -10,7 +10,7 @@ class VoucherItem extends StatelessWidget {
 
   VoucherItem(this.voucherViewModel, {this.onPressed}) : super();
 
-  TextStyle _dateStyle = TextStyle(color: Colors.white, fontSize: 16);
+  TextStyle _dateStyle = TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold);
 
   @override
   Widget build(BuildContext context) {
@@ -38,12 +38,11 @@ class VoucherItem extends StatelessWidget {
                           textBaseline: TextBaseline.ideographic,
                           children: <Widget>[
                             Container(
-                              // height: 40,
                               child: Text(
                                 voucherViewModel.voucherName,
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 30,
+                                  fontSize: 25,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 textAlign: TextAlign.justify,
@@ -55,15 +54,15 @@ class VoucherItem extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    width: 170,
+                    width: 150,
                     child: Column(
                       children: <Widget>[
                         Row(
                           children: <Widget>[
                             Container(
-                              width: 80,
+                              width: 70,
                               child: Text(
-                                "Issue date:  ",
+                                "Issue:  ",
                                 style: _dateStyle,
                               ),
                             ),
@@ -80,9 +79,9 @@ class VoucherItem extends StatelessWidget {
                         Row(
                           children: <Widget>[
                             Container(
-                              width: 80,
+                              width: 70,
                               child: Text(
-                                "Expire date:  ",
+                                "Expire:  ",
                                 style: _dateStyle,
                               ),
                             ),
@@ -102,7 +101,7 @@ class VoucherItem extends StatelessWidget {
                             ? Row(
                                 children: <Widget>[
                                   Container(
-                                    width: 80,
+                                    width: 70,
                                     child: Text(
                                       "Days left:  ",
                                       style: _dateStyle,
@@ -124,7 +123,7 @@ class VoucherItem extends StatelessWidget {
                         Row(
                           children: <Widget>[
                             Container(
-                              width: 80,
+                              width: 70,
                               child: Text(
                                 "Quantity:  ",
                                 style: _dateStyle,
@@ -141,14 +140,17 @@ class VoucherItem extends StatelessWidget {
                   ),
                   Container(
                     child: Center(
-                      child: Text(
-                        "Redeem",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+                      child: InkWell(
+                        onTap: onPressed,
+                        child: Text(
+                          "Redeem",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
                         ),
-                        textAlign: TextAlign.center,
                       ),
                     ),
                     width: 80,
@@ -160,65 +162,7 @@ class VoucherItem extends StatelessWidget {
           ),
         ),
       ),
-    ); // return new Container(
-    //   child: new LamourCard(
-    //     child: new FlatButton(
-    //       onPressed: null,
-    //       child: new Padding(
-    //         padding: new EdgeInsets.only(
-    //             left: 0.0, top: 10.0, right: 0.0, bottom: 10.0),
-    //         child: new Column(
-    //           mainAxisSize: MainAxisSize.min,
-    //           children: <Widget>[
-    //             new Row(
-    //               children: <Widget>[
-    //                 new Expanded(
-    //                   child: new Column(
-    //                     children: <Widget>[
-    //                       new Container(
-    //                         child: new Text(
-    //                           voucherViewModel.voucherName != null
-    //                               ? voucherViewModel.voucherName
-    //                               : "Voucher",
-    //                           style: LamourConstant.largeTextBold,
-    //                         ),
-    //                         alignment: Alignment.centerLeft,
-    //                       ),
-    //                       new Container(
-    //                           child: new Text(
-    //                               "Expire date: " +
-    //                                   DateTime.fromMillisecondsSinceEpoch(
-    //                                           voucherViewModel.voucherExpire)
-    //                                       .toLocal()
-    //                                       .toString()
-    //                                       .substring(2, 10),
-    //                               style: LamourConstant.smallTextBold),
-    //                           margin:
-    //                               new EdgeInsets.only(top: 6.0, bottom: 2.0),
-    //                           alignment: Alignment.topLeft)
-    //                     ],
-    //                   ),
-    //                 ),
-    //                 new FlatButton(
-    //                   onPressed: onPressed,
-    //                   child: new Text(
-    //                     "Redeem",
-    //                     textAlign: TextAlign.center,
-    //                     style: TextStyle(
-    //                       color: Color(LamourColors.actionBlue),
-    //                       fontSize: 18.0,
-    //                       fontWeight: FontWeight.bold,
-    //                     ),
-    //                   ),
-    //                 )
-    //               ],
-    //             ),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
+    );
   }
 }
 

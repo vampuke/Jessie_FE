@@ -313,7 +313,6 @@ class _VoucherPageState extends State<VoucherPage>
     return new StoreBuilder<LamourState>(
       builder: (context, store) {
         return new Scaffold(
-          // backgroundColor: Color(LamourColors.lightGray),
           appBar: new AppBar(
             backgroundColor: Theme.of(context).primaryColor,
             centerTitle: true,

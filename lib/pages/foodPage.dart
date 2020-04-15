@@ -252,10 +252,24 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
         backgroundColor: Theme.of(context).primaryColor,
         title: Text("Food"),
       ),
-      body: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[gender, type, foodDisplay],
+      body: CustomScrollView(
+        shrinkWrap: true,
+        slivers: <Widget>[
+          new SliverPadding(
+            padding: const EdgeInsets.only(bottom: 80.0),
+            sliver: new SliverList(
+              delegate: new SliverChildListDelegate(
+                <Widget>[
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[gender, type, foodDisplay],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _addFoodDialog,

@@ -81,14 +81,14 @@ class CouponShapeBorder extends ShapeBorder {
     var d = rect.height / (1 + 2 * holeCount);
     //虚线
     _drawDashLine(canvas, Offset(rect.width - 93, d / 2), rect.height / 16,
-        rect.height - 18, paint);
+        rect.height - 23, paint);
   }
 
   _drawDashLine(
       Canvas canvas, Offset start, double count, double length, Paint paint) {
     var step = length / count / 2;
     for (int i = 0; i < count; i++) {
-      var offset = start + Offset(0, 2 * step * i);
+      var offset = start + Offset(0, 2 * step * i + 7);
       canvas.drawLine(offset, offset + Offset(0, step), paint);
     }
   }

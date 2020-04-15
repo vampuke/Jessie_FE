@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jessie_wish/common/config/config.dart';
 import 'package:jessie_wish/common/local/localStorage.dart';
@@ -8,6 +9,7 @@ import 'package:jessie_wish/common/service/basicService.dart';
 import 'package:jessie_wish/common/service/svcResult.dart';
 import 'package:jessie_wish/common/model/food_list.dart';
 import 'package:jessie_wish/common/redux/foodRedux.dart';
+import 'package:jessie_wish/common/style/style.dart';
 
 class FoodSvc {
   static getFoodList(store) async {
@@ -35,10 +37,10 @@ class FoodSvc {
         Address.food(), requestParams, null, new Options(method: "post"));
     if (res != null && res.result) {
       if (res.data["code"] == 200) {
-        Fluttertoast.showToast(msg: "Success");
+        Fluttertoast.showToast(msg: "Success", backgroundColor: Color(LamourColors.primaryValue), gravity: ToastGravity.CENTER);
         return true;
       } else {
-        Fluttertoast.showToast(msg: res.data["msg"]);
+        Fluttertoast.showToast(msg: res.data["msg"], backgroundColor: Color(LamourColors.primaryValue), gravity: ToastGravity.CENTER);
         return false;
       }
     } else {

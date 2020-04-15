@@ -227,7 +227,7 @@ class _FlowerPageState extends State<FlowerPage> with WidgetsBindingObserver {
         Spacer(),
         CupertinoButton(
           child: Text(
-            "Add",
+            "Add +",
             style: TextStyle(color: Colors.white),
           ),
           color: Color(LamourColors.actionGreen),
@@ -236,7 +236,7 @@ class _FlowerPageState extends State<FlowerPage> with WidgetsBindingObserver {
         Spacer(),
         CupertinoButton(
           child: Text(
-            "Minus",
+            "Minus -",
             style: TextStyle(color: Colors.white),
           ),
           color: Color(LamourColors.deleteRed),
