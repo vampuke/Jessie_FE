@@ -14,6 +14,7 @@ class UpdateSvc {
     if (res != null && res.result) {
       if (res.data["code"] == null) {
         var currentVersion = await getCurrentVersion();
+        print(currentVersion);
         if (currentVersion != res.data["version"]) {
           return res.data;
         }

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 ///颜色
@@ -208,6 +209,25 @@ class LamourConstant {
     color: Color(LamourColors.primaryValue),
     fontSize: lagerTextSize,
     fontWeight: FontWeight.bold,
+  );
+
+  static BorderSide defaultRoundedBorderSide = BorderSide(
+    color: Color(0x33000000),
+    style: BorderStyle.solid,
+    width: 0.0,
+  );
+
+  static Border defaultRoundedBorder = Border(
+    top: defaultRoundedBorderSide,
+    bottom: defaultRoundedBorderSide,
+    left: defaultRoundedBorderSide,
+    right: defaultRoundedBorderSide,
+  );
+
+  static BoxDecoration defaultRoundedBorderDecoration = BoxDecoration(
+    color: CupertinoColors.white,
+    border: defaultRoundedBorder,
+    borderRadius: BorderRadius.all(Radius.circular(5.0)),
   );
 }
 

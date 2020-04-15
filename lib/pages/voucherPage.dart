@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jessie_wish/common/redux/LamourState.dart';
 import 'package:jessie_wish/common/service/voucherService.dart';
+import 'package:jessie_wish/common/style/style.dart';
 import 'package:jessie_wish/common/utils/commonUtils.dart';
 import 'package:jessie_wish/widget/listState.dart';
 import 'package:jessie_wish/widget/pullDownRefreshWidget.dart';
@@ -159,6 +160,7 @@ class _VoucherPageState extends State<VoucherPage>
                           content: Container(
                             margin: EdgeInsets.only(top: 20.0),
                             child: new CupertinoTextField(
+                              decoration: LamourConstant.defaultRoundedBorderDecoration,
                               controller: voucherController,
                               onChanged: (String value) {
                                 _newVoucher = value;

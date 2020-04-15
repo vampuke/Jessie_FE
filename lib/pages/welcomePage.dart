@@ -75,7 +75,15 @@ class _WelcomePageState extends State<WelcomePage> {
             return CupertinoAlertDialog(
               title: new Text("Update Available"),
               content: Container(
-                child: Text(res['content'].replaceAll('\\n', "\n")),
+                padding: EdgeInsets.only(top: 20.0),
+                child: Text(
+                  res['content'].replaceAll('\\n', "\n"),
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    color: Color(LamourColors.subTextColor)
+                  ),
+                ),
               ),
               actions: <Widget>[
                 CupertinoDialogAction(

@@ -187,6 +187,7 @@ class _FlowerPageState extends State<FlowerPage> with WidgetsBindingObserver {
         ),
         Expanded(
           child: CupertinoTextField(
+            decoration: LamourConstant.defaultRoundedBorderDecoration,
             controller: flowerController,
             onChanged: (value) {
               setState(() {
@@ -210,6 +211,7 @@ class _FlowerPageState extends State<FlowerPage> with WidgetsBindingObserver {
         Container(
           width: 80,
           child: CupertinoTextField(
+            decoration: LamourConstant.defaultRoundedBorderDecoration,
             keyboardType: TextInputType.number,
             controller: quantityContorller,
             onChanged: (value) {

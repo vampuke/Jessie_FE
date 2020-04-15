@@ -210,6 +210,8 @@ class _WishPageState extends State<WishPage>
                         content: Container(
                           margin: EdgeInsets.only(top: 25.0),
                           child: new CupertinoTextField(
+                            decoration:
+                                LamourConstant.defaultRoundedBorderDecoration,
                             controller: wishController,
                             onChanged: (String value) {
                               _newWish = value;

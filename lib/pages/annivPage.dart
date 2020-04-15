@@ -160,6 +160,7 @@ class _AnnivPageState extends State<AnnivPage>
                     ),
                   ),
                   new CupertinoTextField(
+                    decoration: LamourConstant.defaultRoundedBorderDecoration,
                     controller: annivController,
                     onChanged: (String value) {
                       _newAnniv = value;

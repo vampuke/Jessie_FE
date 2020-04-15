@@ -147,6 +147,7 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
               content: Container(
                 margin: EdgeInsets.only(top: 20),
                 child: new CupertinoTextField(
+                  decoration: LamourConstant.defaultRoundedBorderDecoration,
                   controller: foodController,
                   onChanged: (String value) {
                     _newFood = value;
