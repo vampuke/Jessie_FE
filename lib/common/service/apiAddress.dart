@@ -11,6 +11,10 @@ class Address {
     return "${host}user/logout";
   }
 
+  static registerJpush() {
+    return "${host}user/jpush";
+  }
+
   static network() {
     return "${host}network";
   }

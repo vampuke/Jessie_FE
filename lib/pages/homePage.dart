@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jessie_wish/common/style/style.dart';
 import 'package:jessie_wish/pages/annivPage.dart';
-import 'package:jessie_wish/pages/flowerPage.dart';
-import 'package:jessie_wish/pages/foodPage.dart';
 import 'package:jessie_wish/pages/toolsPage.dart';
 import 'package:jessie_wish/pages/voucherPage.dart';
 import 'package:jessie_wish/pages/wishPage.dart';
@@ -12,27 +12,8 @@ import 'package:jessie_wish/widget/tabBarWidget.dart';
 class HomePage extends StatelessWidget {
   static final String sName = "home";
 
-  // Exit app tip
-  Future<bool> _dialogExitApp(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (context) => new CupertinoAlertDialog(
-        content: new Text("Confirm to exit app?"),
-        actions: <Widget>[
-          new CupertinoDialogAction(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: new Text("Cancel"),
-          ),
-          new CupertinoDialogAction(
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-            child: new Text("Yes"),
-          ),
-        ],
-      ),
-    );
-  }
+  DateTime lastPopTime;
+
 
   _renderTab(icon, text) {
     return new Tab(
@@ -61,8 +42,16 @@ class HomePage extends StatelessWidget {
       _renderTab(LamourICons.TOOLS, "TOOLS")
     ];
     return WillPopScope(
-      onWillPop: () {
-        return _dialogExitApp(context);
+      onWillPop: () async {
+        if (lastPopTime == null ||
+            DateTime.now().difference(lastPopTime) > Duration(seconds: 2)) {
+          lastPopTime = DateTime.now();
+          Fluttertoast.showToast(msg: "Click again to exit", backgroundColor: Colors.black, textColor: Colors.white);
+        } else {
+          lastPopTime = DateTime.now();
+          // 退出app
+          await SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+        }
       },
       child: new TabBarWidget(
         type: TabBarWidget.BOTTOM_TAB,
