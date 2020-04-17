@@ -54,6 +54,18 @@ class UserSvc {
     }
   }
 
+  static registerJpush(int userId, String jpushId) async {
+    Map requestParams = {"user_id": userId, "jpush_id": jpushId};
+    var res = await HttpManager.netFetch(
+      Address.registerJpush(),
+      requestParams,
+      null,
+      new Options(method: "post"),
+    );
+    print(res.data);
+    return null;
+  }
+
   static readUser(store) async {
     var userText = await LocalStorage.get(Config.USER_INFO);
     if (userText != null) {

@@ -4,6 +4,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:jessie_wish/common/model/wish_list.dart';
 import 'package:jessie_wish/common/redux/LamourState.dart';
+import 'package:jessie_wish/common/service/userService.dart';
 import 'package:jessie_wish/common/service/wishService.dart';
 import 'package:jessie_wish/common/style/style.dart';
 import 'package:jessie_wish/common/utils/commonUtils.dart';
@@ -12,6 +13,7 @@ import 'package:jessie_wish/widget/pullDownRefreshWidget.dart';
 import 'package:jessie_wish/widget/wishItem.dart';
 import 'package:jessie_wish/common/model/user.dart' as User;
 import 'package:redux/redux.dart';
+import 'package:jpush_flutter/jpush_flutter.dart';
 
 class WishPage extends StatefulWidget {
   @override
@@ -31,6 +33,8 @@ class _WishPageState extends State<WishPage>
 
   final TextEditingController wishController = new TextEditingController();
 
+  final JPush jpush = new JPush();
+
   @override
   bool get wantKeepAlive => true;
 
@@ -42,6 +46,11 @@ class _WishPageState extends State<WishPage>
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     wishController.value = new TextEditingValue(text: "");
+    jpush.getRegistrationID().then((rid) {
+      if (rid != null) {
+        UserSvc.registerJpush(_getStore().state.userInfo.userId, rid);
+      }
+    });
   }
 
   @override
