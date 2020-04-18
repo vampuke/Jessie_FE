@@ -4,6 +4,7 @@ import 'package:jessie_wish/pages/flowerPage.dart';
 import 'package:jessie_wish/pages/foodPage.dart';
 import 'package:jessie_wish/pages/homePage.dart';
 import 'package:jessie_wish/pages/loginPage.dart';
+import 'package:jessie_wish/pages/sendMsg.dart';
 
 class NavigatorUtils {
   static pushReplacementNamed(BuildContext context, String routeName) {
@@ -28,6 +29,10 @@ class NavigatorUtils {
 
   static goFlower(BuildContext context) {
     NavigatorRouter(context, new FlowerPage());
+  }
+
+  static goMsg(BuildContext context) {
+    NavigatorRouter(context, new SendMsgPage());
   }
 
   static NavigatorRouter(BuildContext context, Widget widget) {

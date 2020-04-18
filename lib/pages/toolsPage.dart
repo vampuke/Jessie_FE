@@ -2,10 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:jessie_wish/common/redux/LamourState.dart';
 import 'package:jessie_wish/common/service/userService.dart';
 import 'package:jessie_wish/common/style/style.dart';
 import 'package:jessie_wish/common/utils/commonUtils.dart';
 import 'package:jessie_wish/common/utils/navigatorUtils.dart';
+import 'package:redux/redux.dart';
 
 class ToolsPage extends StatefulWidget {
   @override
@@ -13,11 +16,19 @@ class ToolsPage extends StatefulWidget {
 }
 
 class _ToolsPageState extends State<ToolsPage> with WidgetsBindingObserver {
-  final List<String> entries = <String>["Food", "Flower"];
+  final List<String> entries = <String>["Food", "Flower", "Msg"];
 
-  final List<IconData> icons = <IconData>[LamourICons.FOOD, LamourICons.FLOWER];
+  final List<IconData> icons = <IconData>[
+    LamourICons.FOOD,
+    LamourICons.FLOWER,
+    LamourICons.FLOWER
+  ];
 
-  final List<int> colors = <int>[LamourColors.deleteRed, 0xFF4DB6AC];
+  final List<int> colors = <int>[
+    LamourColors.deleteRed,
+    0xFF4DB6AC,
+    0xFF4DB6AC
+  ];
 
   bool _iconStatus = false;
 
@@ -42,6 +53,13 @@ class _ToolsPageState extends State<ToolsPage> with WidgetsBindingObserver {
     _timer.cancel();
   }
 
+  Store<LamourState> _getStore() {
+    if (context == null) {
+      return null;
+    }
+    return StoreProvider.of(context);
+  }
+
   void _navigateToPage(entry) {
     switch (entry) {
       case "Food":
@@ -49,6 +67,9 @@ class _ToolsPageState extends State<ToolsPage> with WidgetsBindingObserver {
         break;
       case "Flower":
         NavigatorUtils.goFlower(context);
+        break;
+      case 'Msg':
+        NavigatorUtils.goMsg(context);
         break;
       default:
     }
@@ -67,6 +88,9 @@ class _ToolsPageState extends State<ToolsPage> with WidgetsBindingObserver {
   }
 
   Widget _toolsList(context, index) {
+    if (entries[index] == "Msg" && _getStore().state.userInfo.userId == 2) {
+      return Container();
+    }
     return InkWell(
       onTap: () {
         _navigateToPage(entries[index]);

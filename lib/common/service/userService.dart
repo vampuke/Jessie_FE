@@ -66,6 +66,27 @@ class UserSvc {
     return null;
   }
 
+  static sendMessage(String title, String alert) async {
+    Map requestParams = {"title": title, "alert": alert, "user_id": 2};
+    var res = await HttpManager.netFetch(
+      Address.sendMsg(),
+      requestParams,
+      null,
+      new Options(method: "post"),
+    );
+    if (res != null && res.result) {
+      if (res.data["code"] == 200) {
+        return true;
+      } else {
+        Fluttertoast.showToast(msg: res.data["msg"]);
+        return false;
+      }
+    } else {
+      Fluttertoast.showToast(msg: "Network error");
+      return false;
+    }
+  }
+
   static readUser(store) async {
     var userText = await LocalStorage.get(Config.USER_INFO);
     if (userText != null) {
