@@ -27,7 +27,9 @@ class _WishPageState extends State<WishPage>
         WidgetsBindingObserver {
   int currentStatus = 1;
 
-  bool switchType = false;
+  String _wishStatus = "Imcomplete";
+
+  int _currentQuantity = 0;
 
   String _newWish = "";
 
@@ -100,8 +102,9 @@ class _WishPageState extends State<WishPage>
   void updateWishList() {
     Store _store = _getStore();
     setState(() {
-      pullDownRefreshWidgetControl.dataList =
-          filterWish(_store.state.wishList.wish);
+      var displayList = filterWish(_store.state.wishList.wish);
+      _currentQuantity = displayList.length;
+      pullDownRefreshWidgetControl.dataList = filterWish(displayList);
     });
   }
 
@@ -184,6 +187,57 @@ class _WishPageState extends State<WishPage>
     );
   }
 
+  void _addWish() {
+    _newWish = "";
+    wishController.value = new TextEditingValue(text: "");
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: new Text("Add new wish"),
+          content: Container(
+            margin: EdgeInsets.only(top: 25.0),
+            child: new CupertinoTextField(
+              decoration: LamourConstant.defaultRoundedBorderDecoration,
+              controller: wishController,
+              onChanged: (String value) {
+                _newWish = value;
+              },
+              maxLines: 5,
+              placeholder: "Input your wish",
+            ),
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text("Cancel")),
+            CupertinoDialogAction(
+              onPressed: () async {
+                if (_newWish == null || _newWish.trim().length == 0) {
+                  return;
+                }
+                CommonUtils.showLoadingDialog(context);
+                WishSvc.addWish(_getStore(), _newWish).then(
+                  (res) {
+                    Navigator.pop(context);
+                    if (res == true) {
+                      _newWish = "";
+                      Navigator.pop(context);
+                      handleRefresh();
+                    }
+                  },
+                );
+              },
+              child: Text("Add"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context); // See AutomaticKeepAliveClientMixin.
@@ -191,75 +245,77 @@ class _WishPageState extends State<WishPage>
       builder: (context, store) {
         return new Scaffold(
           appBar: new AppBar(
+            centerTitle: true,
             backgroundColor: Theme.of(context).primaryColor,
-            actions: <Widget>[
-              new Container(
-                child: new CupertinoSwitch(
-                  value: switchType,
-                  onChanged: (bool value) {
-                    setState(
-                      () {
-                        switchType = value;
-                        currentStatus = switchType == false ? 1 : 3;
-                        updateWishList();
-                      },
-                    );
-                  },
+            title: CupertinoSlidingSegmentedControl(
+              backgroundColor: Color(LamourColors.primaryValue),
+              thumbColor: Colors.white,
+              groupValue: _wishStatus,
+              onValueChanged: (value) {
+                setState(() {
+                  _wishStatus = value;
+                  currentStatus = _wishStatus == "Imcomplete" ? 1 : 3;
+                  updateWishList();
+                });
+              },
+              children: {
+                "Imcomplete": Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Imcomplete",
+                        textAlign: TextAlign.center,
+                      ),
+                      _wishStatus == "Imcomplete"
+                          ? Container(
+                              padding: EdgeInsets.all(3),
+                              margin: EdgeInsets.only(left: 5),
+                              child: Text(
+                                _currentQuantity.toString(),
+                                style: TextStyle(
+                                    fontSize: 10, color: Colors.white),
+                              ),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(LamourColors.deleteRed),
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  ),
                 ),
-              ),
+                "Completed": Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Completed",
+                        textAlign: TextAlign.center,
+                      ),
+                      _wishStatus == "Completed"
+                          ? Container(
+                              padding: EdgeInsets.all(3),
+                              margin: EdgeInsets.only(left: 5),
+                              child: Text(
+                                _currentQuantity.toString(),
+                                style: TextStyle(
+                                    fontSize: 10, color: Colors.white),
+                              ),
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(LamourColors.deleteRed),
+                              ),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                ),
+              },
+            ),
+            actions: <Widget>[
               new IconButton(
-                onPressed: () {
-                  _newWish = "";
-                  wishController.value = new TextEditingValue(text: "");
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return CupertinoAlertDialog(
-                        title: new Text("Add new wish"),
-                        content: Container(
-                          margin: EdgeInsets.only(top: 25.0),
-                          child: new CupertinoTextField(
-                            decoration:
-                                LamourConstant.defaultRoundedBorderDecoration,
-                            controller: wishController,
-                            onChanged: (String value) {
-                              _newWish = value;
-                            },
-                            maxLines: 5,
-                            placeholder: "Input your wish",
-                          ),
-                        ),
-                        actions: <Widget>[
-                          CupertinoDialogAction(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text("Cancel")),
-                          CupertinoDialogAction(
-                            onPressed: () async {
-                              if (_newWish == null ||
-                                  _newWish.trim().length == 0) {
-                                return;
-                              }
-                              CommonUtils.showLoadingDialog(context);
-                              WishSvc.addWish(_getStore(), _newWish).then(
-                                (res) {
-                                  Navigator.pop(context);
-                                  if (res == true) {
-                                    _newWish = "";
-                                    Navigator.pop(context);
-                                    handleRefresh();
-                                  }
-                                },
-                              );
-                            },
-                            child: Text("Add"),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
+                onPressed: _addWish,
                 icon: new Icon(
                   Icons.add,
                   size: 30.0,
