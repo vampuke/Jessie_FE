@@ -127,6 +127,7 @@ class _FoodPageState extends State<FoodPage> with WidgetsBindingObserver {
     FoodSvc.deleteFood(_getStore(), foodId).then(
       (res) {
         Navigator.pop(context);
+        Navigator.pop(context);
         if (res == true) {
           _updateFoodList();
         }
