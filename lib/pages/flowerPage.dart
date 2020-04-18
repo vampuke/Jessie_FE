@@ -91,7 +91,6 @@ class _FlowerPageState extends State<FlowerPage> with WidgetsBindingObserver {
       var res = await FlowerSvc.getFlower();
       if (res != false) {
         setState(() {
-          print('called set state');
           _flower = res;
         });
       }
@@ -105,6 +104,44 @@ class _FlowerPageState extends State<FlowerPage> with WidgetsBindingObserver {
     } else {
       return "0";
     }
+  }
+
+  void _revertAlert(flowerLog) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          title: Text("Confirm revert?"),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text("Confirm"),
+              onPressed: () {
+                _revertFlowerWorker(flowerLog);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _revertFlowerWorker(flowerLog) async {
+    CommonUtils.showLoadingDialog(context);
+    FlowerSvc.revertFlower(flowerLog.id, flowerLog.quantity).then(
+      (res) async {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        if (res == true) {
+          _flower = await _getFlower(true);
+        }
+      },
+    );
   }
 
   Widget _renderLog() {
@@ -127,23 +164,45 @@ class _FlowerPageState extends State<FlowerPage> with WidgetsBindingObserver {
     return Center(
       child: Container(
         margin: EdgeInsets.all(10),
-        child: Text(
-          DateTime.fromMillisecondsSinceEpoch(_flower.flowerLog[index].datetime)
-                  .toLocal()
-                  .toString()
-                  .substring(2, 10) +
-              "  " +
-              _flower.flowerLog[index].reason +
-              "  " +
-              (_flower.flowerLog[index].quantity > 0
-                  ? "+" + _flower.flowerLog[index].quantity.toString()
-                  : _flower.flowerLog[index].quantity.toString()),
-          style: TextStyle(
-              fontSize: 14.0,
-              color: Color((_flower.flowerLog[index].quantity > 0
-                  ? LamourColors.deleteRed
-                  : LamourColors.likeGreen))),
-          textAlign: TextAlign.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              DateTime.fromMillisecondsSinceEpoch(
+                          _flower.flowerLog[index].datetime)
+                      .toLocal()
+                      .toString()
+                      .substring(2, 10) +
+                  "  " +
+                  _flower.flowerLog[index].reason +
+                  "  " +
+                  (_flower.flowerLog[index].quantity > 0
+                      ? "+" + _flower.flowerLog[index].quantity.toString()
+                      : _flower.flowerLog[index].quantity.toString()),
+              style: TextStyle(
+                  fontSize: 14.0,
+                  color: Color((_flower.flowerLog[index].quantity > 0
+                      ? LamourColors.deleteRed
+                      : LamourColors.likeGreen))),
+              textAlign: TextAlign.center,
+            ),
+            Container(
+              height: 24,
+              child: Center(
+                child: IconButton(
+                  padding: EdgeInsets.all(0),
+                  iconSize: 16,
+                  icon: Icon(
+                    Icons.replay,
+                    color: Color(LamourColors.likeGreen),
+                  ),
+                  onPressed: () {
+                    _revertAlert(_flower.flowerLog[index]);
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

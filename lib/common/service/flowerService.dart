@@ -26,7 +26,28 @@ class FlowerSvc {
         Address.flower(), requestParams, null, new Options(method: "post"));
     if (res != null && res.result) {
       if (res.data["code"] == 200) {
-        Fluttertoast.showToast(msg: quantity > 0 ? "Thank you for your generous gift!!" : "花花又少了  哭哭");
+        Fluttertoast.showToast(
+            msg: quantity > 0
+                ? "Thank you for your generous gift!!"
+                : "花花又少了  哭哭");
+        return true;
+      } else {
+        Fluttertoast.showToast(msg: res.data["msg"]);
+        return false;
+      }
+    } else {
+      Fluttertoast.showToast(msg: "Network error");
+      return false;
+    }
+  }
+
+  static revertFlower(int logId, int quantity) async {
+    Map requestParams = {"id": logId, "quantity": quantity};
+    var res = await HttpManager.netFetch(
+        Address.flower(), requestParams, null, new Options(method: "post"));
+    if (res != null && res.result) {
+      if (res.data["code"] == 200) {
+        Fluttertoast.showToast(msg: "Successful");
         return true;
       } else {
         Fluttertoast.showToast(msg: res.data["msg"]);

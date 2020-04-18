@@ -15,6 +15,10 @@ class Address {
     return "${host}user/jpush";
   }
 
+  static sendMsg() {
+    return "${host}user/notification";
+  }
+
   static network() {
     return "${host}network";
   }
