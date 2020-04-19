@@ -243,93 +243,95 @@ class _WishPageState extends State<WishPage>
     super.build(context); // See AutomaticKeepAliveClientMixin.
     return new StoreBuilder<LamourState>(
       builder: (context, store) {
-        return new Scaffold(
-          appBar: new AppBar(
-            centerTitle: true,
-            backgroundColor: Theme.of(context).primaryColor,
-            title: CupertinoSlidingSegmentedControl(
-              backgroundColor: Color(LamourColors.primaryValue),
-              thumbColor: Colors.white,
-              groupValue: _wishStatus,
-              onValueChanged: (value) {
-                setState(() {
-                  _wishStatus = value;
-                  currentStatus = _wishStatus == "Imcomplete" ? 1 : 3;
-                  updateWishList();
-                });
-              },
-              children: {
-                "Imcomplete": Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "Imcomplete",
-                        textAlign: TextAlign.center,
-                      ),
-                      _wishStatus == "Imcomplete"
-                          ? Container(
-                              padding: EdgeInsets.all(3),
-                              margin: EdgeInsets.only(left: 5),
-                              child: Text(
-                                _currentQuantity.toString(),
-                                style: TextStyle(
-                                    fontSize: 10, color: Colors.white),
-                              ),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(LamourColors.deleteRed),
-                              ),
-                            )
-                          : Container(),
-                    ],
+        return new CupertinoPageScaffold(
+          child: Scaffold(
+            appBar: new AppBar(
+              centerTitle: true,
+              backgroundColor: Theme.of(context).primaryColor,
+              title: CupertinoSlidingSegmentedControl(
+                backgroundColor: Color(LamourColors.primaryValue),
+                thumbColor: Colors.white,
+                groupValue: _wishStatus,
+                onValueChanged: (value) {
+                  setState(() {
+                    _wishStatus = value;
+                    currentStatus = _wishStatus == "Imcomplete" ? 1 : 3;
+                    updateWishList();
+                  });
+                },
+                children: {
+                  "Imcomplete": Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "Imcomplete",
+                          textAlign: TextAlign.center,
+                        ),
+                        _wishStatus == "Imcomplete"
+                            ? Container(
+                                padding: EdgeInsets.all(3),
+                                margin: EdgeInsets.only(left: 5),
+                                child: Text(
+                                  _currentQuantity.toString(),
+                                  style: TextStyle(
+                                      fontSize: 10, color: Colors.white),
+                                ),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(LamourColors.deleteRed),
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    ),
                   ),
-                ),
-                "Completed": Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text(
-                        "Completed",
-                        textAlign: TextAlign.center,
-                      ),
-                      _wishStatus == "Completed"
-                          ? Container(
-                              padding: EdgeInsets.all(3),
-                              margin: EdgeInsets.only(left: 5),
-                              child: Text(
-                                _currentQuantity.toString(),
-                                style: TextStyle(
-                                    fontSize: 10, color: Colors.white),
-                              ),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(LamourColors.deleteRed),
-                              ),
-                            )
-                          : Container(),
-                    ],
+                  "Completed": Center(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "Completed",
+                          textAlign: TextAlign.center,
+                        ),
+                        _wishStatus == "Completed"
+                            ? Container(
+                                padding: EdgeInsets.all(3),
+                                margin: EdgeInsets.only(left: 5),
+                                child: Text(
+                                  _currentQuantity.toString(),
+                                  style: TextStyle(
+                                      fontSize: 10, color: Colors.white),
+                                ),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(LamourColors.deleteRed),
+                                ),
+                              )
+                            : Container(),
+                      ],
+                    ),
                   ),
-                ),
-              },
-            ),
-            actions: <Widget>[
-              new IconButton(
-                onPressed: _addWish,
-                icon: new Icon(
-                  Icons.add,
-                  size: 30.0,
-                ),
+                },
               ),
-            ],
-          ),
-          body: PullDownRefreshWidget(
-            pullDownRefreshWidgetControl,
-            (BuildContext context, int index) =>
-                _renderEventItem(pullDownRefreshWidgetControl.dataList[index]),
-            handleRefresh,
-            onLoadMore,
-            refreshKey: refreshIndicatorKey,
+              actions: <Widget>[
+                new IconButton(
+                  onPressed: _addWish,
+                  icon: new Icon(
+                    Icons.add,
+                    size: 30.0,
+                  ),
+                ),
+              ],
+            ),
+            body: PullDownRefreshWidget(
+              pullDownRefreshWidgetControl,
+              (BuildContext context, int index) => _renderEventItem(
+                  pullDownRefreshWidgetControl.dataList[index]),
+              handleRefresh,
+              onLoadMore,
+              refreshKey: refreshIndicatorKey,
+            ),
           ),
         );
       },

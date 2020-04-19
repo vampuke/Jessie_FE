@@ -190,27 +190,29 @@ class _AnnivPageState extends State<AnnivPage>
     super.build(context); // See AutomaticKeepAliveClientMixin.
     return new StoreBuilder<LamourState>(
       builder: (context, store) {
-        return new Scaffold(
-          appBar: new AppBar(
-            backgroundColor: Theme.of(context).primaryColor,
-            actions: <Widget>[
-              new IconButton(
-                onPressed: _showAddDialog,
-                icon: new Icon(
-                  Icons.add,
-                  size: 30.0,
+        return new CupertinoPageScaffold(
+          child: Scaffold(
+            appBar: new AppBar(
+              backgroundColor: Theme.of(context).primaryColor,
+              actions: <Widget>[
+                new IconButton(
+                  onPressed: _showAddDialog,
+                  icon: new Icon(
+                    Icons.add,
+                    size: 30.0,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          body: PullDownRefreshWidget(
-            pullDownRefreshWidgetControl,
-            (BuildContext context, int index) =>
-                _renderEventItem(pullDownRefreshWidgetControl.dataList[index]),
-            handleRefresh,
-            onLoadMore,
-            refreshKey: refreshIndicatorKey,
-            topPadding: 30.0,
+              ],
+            ),
+            body: PullDownRefreshWidget(
+              pullDownRefreshWidgetControl,
+              (BuildContext context, int index) => _renderEventItem(
+                  pullDownRefreshWidgetControl.dataList[index]),
+              handleRefresh,
+              onLoadMore,
+              refreshKey: refreshIndicatorKey,
+              topPadding: 30.0,
+            ),
           ),
         );
       },

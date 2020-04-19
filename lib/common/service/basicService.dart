@@ -9,7 +9,7 @@ import 'package:jessie_wish/common/service/errorCode.dart';
 
 import 'package:jessie_wish/common/config/Config.dart';
 import 'package:connectivity/connectivity.dart';
-import 'package:jessie_wish/common/utils/logoutEvent.dart';
+import 'package:jessie_wish/common/utils/globalEvent.dart';
 
 
 ///http请求

@@ -312,42 +312,44 @@ class _VoucherPageState extends State<VoucherPage>
     super.build(context); // See AutomaticKeepAliveClientMixin.
     return new StoreBuilder<LamourState>(
       builder: (context, store) {
-        return new Scaffold(
-          appBar: new AppBar(
-            backgroundColor: Theme.of(context).primaryColor,
-            centerTitle: true,
-            title: CupertinoSlidingSegmentedControl(
-              backgroundColor: Color(LamourColors.primaryValue),
-              thumbColor: Colors.white,
-              groupValue: _gender,
-              onValueChanged: (value) {
-                setState(() {
-                  _gender = value;
-                  getVoucherList();
-                });
-              },
-              children: {
-                "She": Text("She"),
-                "He": Text("He"),
-              },
-            ),
-            actions: <Widget>[
-              new IconButton(
-                onPressed: _addVoucher,
-                icon: new Icon(
-                  Icons.add,
-                  size: 30.0,
-                ),
+        return new CupertinoPageScaffold(
+          child: Scaffold(
+            appBar: new AppBar(
+              backgroundColor: Theme.of(context).primaryColor,
+              centerTitle: true,
+              title: CupertinoSlidingSegmentedControl(
+                backgroundColor: Color(LamourColors.primaryValue),
+                thumbColor: Colors.white,
+                groupValue: _gender,
+                onValueChanged: (value) {
+                  setState(() {
+                    _gender = value;
+                    getVoucherList();
+                  });
+                },
+                children: {
+                  "She": Text("She"),
+                  "He": Text("He"),
+                },
               ),
-            ],
-          ),
-          body: PullDownRefreshWidget(
-            pullDownRefreshWidgetControl,
-            (BuildContext context, int index) =>
-                _renderEventItem(pullDownRefreshWidgetControl.dataList[index]),
-            handleRefresh,
-            onLoadMore,
-            refreshKey: refreshIndicatorKey,
+              actions: <Widget>[
+                new IconButton(
+                  onPressed: _addVoucher,
+                  icon: new Icon(
+                    Icons.add,
+                    size: 30.0,
+                  ),
+                ),
+              ],
+            ),
+            body: PullDownRefreshWidget(
+              pullDownRefreshWidgetControl,
+              (BuildContext context, int index) => _renderEventItem(
+                  pullDownRefreshWidgetControl.dataList[index]),
+              handleRefresh,
+              onLoadMore,
+              refreshKey: refreshIndicatorKey,
+            ),
           ),
         );
       },

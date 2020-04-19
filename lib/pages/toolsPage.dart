@@ -133,8 +133,9 @@ class _ToolsPageState extends State<ToolsPage> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(LamourColors.lightGray),
+    return CupertinoPageScaffold(
+      child: Scaffold(
+              backgroundColor: Color(LamourColors.lightGray),
       appBar: AppBar(
         backgroundColor: Theme.of(context).primaryColor,
         title: Text("Tools"),
@@ -145,12 +146,13 @@ class _ToolsPageState extends State<ToolsPage> with WidgetsBindingObserver {
           ),
         ],
       ),
-      body: ListView.builder(
-        padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
-        itemCount: entries.length,
-        itemBuilder: (context, index) {
-          return _toolsList(context, index);
-        },
+        body: ListView.builder(
+          padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
+          itemCount: entries.length,
+          itemBuilder: (context, index) {
+            return _toolsList(context, index);
+          },
+        ),
       ),
     );
   }

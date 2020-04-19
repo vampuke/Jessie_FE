@@ -1,4 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jessie_wish/common/utils/naviManager.dart';
+import 'package:jessie_wish/pages/flowerPage.dart';
+import 'package:jessie_wish/pages/foodPage.dart';
 import 'package:jessie_wish/pages/homePage.dart';
 import 'package:jessie_wish/pages/loginPage.dart';
 
@@ -9,7 +13,8 @@ import 'package:jessie_wish/common/utils/commonUtils.dart';
 import 'package:jessie_wish/common/style/style.dart';
 import 'package:jessie_wish/pages/welcomePage.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
-import 'package:jessie_wish/common/utils/logoutEvent.dart';
+import 'package:jessie_wish/common/utils/globalEvent.dart';
+import 'dart:convert';
 
 void main() => runApp(MyApp());
 
@@ -30,9 +35,10 @@ class _MyAppState extends State<MyApp> {
 
   final JPush jpush = new JPush();
 
+  NaviManager _naviManager = NaviManager.instance;
+
   final GlobalKey<NavigatorState> navigatorKey =
       new GlobalKey<NavigatorState>();
-
 
   @override
   void initState() {
@@ -43,6 +49,12 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  _popPage() {
+    if (navigatorKey.currentState.canPop() == true) {
+      navigatorKey.currentState.pop(navigatorKey.currentContext);
+      _popPage();
+    }
+  }
 
   Future<void> initPlatformState() async {
     try {
@@ -52,6 +64,29 @@ class _MyAppState extends State<MyApp> {
         },
         onOpenNotification: (Map<String, dynamic> message) async {
           print("打开提醒！！！: $message");
+          String page = json.decode(message['extras']['cn.jpush.android.EXTRA'])['page'];
+          _naviManager.savedPage = page;
+          if (page != null) {
+            _popPage();
+            switch (page) {
+              case 'wish':
+                eventBus.fire(IndexEvent(0));
+                break;
+              case 'voucher':
+                eventBus.fire(IndexEvent(1));
+                break;
+              case 'anniv':
+                eventBus.fire(IndexEvent(2));
+                break;
+              case 'food':
+                eventBus.fire(IndexEvent(3));
+                break;
+              case 'flower':
+                eventBus.fire(IndexEvent(4));
+                break;
+              default:
+            }
+          }
         },
       );
     } catch (e) {
