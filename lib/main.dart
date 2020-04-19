@@ -9,6 +9,7 @@ import 'package:jessie_wish/common/utils/commonUtils.dart';
 import 'package:jessie_wish/common/style/style.dart';
 import 'package:jessie_wish/pages/welcomePage.dart';
 import 'package:jpush_flutter/jpush_flutter.dart';
+import 'package:jessie_wish/common/utils/logoutEvent.dart';
 
 void main() => runApp(MyApp());
 
@@ -37,7 +38,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    eventBus.on<LogoutEvent>().listen((event) {
+      navigatorKey.currentState.pushReplacementNamed("/");
+    });
   }
+
 
   Future<void> initPlatformState() async {
     try {
