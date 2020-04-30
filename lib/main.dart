@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jessie_wish/common/utils/naviManager.dart';
-import 'package:jessie_wish/pages/flowerPage.dart';
-import 'package:jessie_wish/pages/foodPage.dart';
 import 'package:jessie_wish/pages/homePage.dart';
 import 'package:jessie_wish/pages/loginPage.dart';
 
@@ -44,6 +45,11 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     initPlatformState();
+    if (Platform.isAndroid) {
+      SystemUiOverlayStyle systemUiOverlayStyle =
+          SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    }
     eventBus.on<LogoutEvent>().listen((event) {
       navigatorKey.currentState.pushReplacementNamed("/");
     });
@@ -64,7 +70,8 @@ class _MyAppState extends State<MyApp> {
         },
         onOpenNotification: (Map<String, dynamic> message) async {
           print("打开提醒！！！: $message");
-          String page = json.decode(message['extras']['cn.jpush.android.EXTRA'])['page'];
+          String page =
+              json.decode(message['extras']['cn.jpush.android.EXTRA'])['page'];
           _naviManager.savedPage = page;
           if (page != null) {
             _popPage();

@@ -25,10 +25,12 @@ class LamourColors {
   static const int subTextColor = 0xff959595;
   static const int subLightTextColor = 0xffc4c4c4;
   static const int lightGray = 0xFFE0E0E0;
+  static const int gray = 0xFFBFBFBF;
   static const int likeGreen = 0xFF00C853;
   static const int dislikeRed = 0xFFFF6D00;
   static const int actionGreen = 0xFF1890FF;
   static const int happyOrange = 0xFFFF8762;
+  static const int lightTheme = 0xFFFFF1F0;
 
   static const int mainBackgroundColor = miWhite;
 
@@ -236,6 +238,9 @@ class LamourICons {
 
   static const String DEFAULT_USER_ICON = 'static/images/logo.png';
   static const String DEFAULT_IMAGE = 'static/images/default_img.png';
+  static const String FOOD_PNG = "static/images/food.png";
+  static const String FLOWER_PNG = "static/images/flower.png";
+  static const String RESTAURANT_PNG = "static/images/restaurant.png";
 
   static const IconData NEXT =
       const IconData(0xe62f, fontFamily: LamourICons.FONT_FAMILY);

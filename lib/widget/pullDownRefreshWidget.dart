@@ -125,7 +125,9 @@ class _PullDownRefreshWidgetState extends State<PullDownRefreshWidget> {
       ///下拉刷新触发，返回的是一个Future
       onRefresh: onRefresh,
       child: new ListView.builder(
-        padding: EdgeInsets.only(top: topPadding == null ? 0.0 : topPadding),
+        padding: EdgeInsets.only(
+            top: topPadding == null ? 0.0 : topPadding, bottom: 20),
+
         ///保持ListView任何情况都能滚动，解决在RefreshIndicator的兼容问题。
         physics: const AlwaysScrollableScrollPhysics(),
 

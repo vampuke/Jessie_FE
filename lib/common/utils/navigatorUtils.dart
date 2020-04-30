@@ -4,6 +4,8 @@ import 'package:jessie_wish/pages/flowerPage.dart';
 import 'package:jessie_wish/pages/foodPage.dart';
 import 'package:jessie_wish/pages/homePage.dart';
 import 'package:jessie_wish/pages/loginPage.dart';
+import 'package:jessie_wish/pages/restaurantEditPage.dart';
+import 'package:jessie_wish/pages/restaurantPage.dart';
 import 'package:jessie_wish/pages/sendMsg.dart';
 
 class NavigatorUtils {
@@ -29,6 +31,14 @@ class NavigatorUtils {
 
   static goFlower(BuildContext context) {
     NavigatorRouter(context, new FlowerPage());
+  }
+
+  static goRestaurant(BuildContext context) {
+    NavigatorRouter(context, new RestaurantPage());
+  }
+
+  static goRestaurantEdit(BuildContext context, param) {
+    NavigatorRouter(context, new RestaurantEditPage(param));
   }
 
   static goMsg(BuildContext context) {

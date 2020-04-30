@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:flutter_statusbarcolor/flutter_statusbarcolor.dart';
 import 'package:jessie_wish/common/service/networkService.dart';
 import 'package:jessie_wish/common/service/updateService.dart';
 import 'package:jessie_wish/common/service/userService.dart';
@@ -48,7 +47,6 @@ class _WelcomePageState extends State<WelcomePage> {
 
     ///防止多次进入
     Store<LamourState> store = StoreProvider.of(context);
-    FlutterStatusbarcolor.setStatusBarColor(Color(LamourColors.primaryValue));
     _checkUpdate();
     OneWordService.getOneWord();
     NetworkSvc.getNetwork().then((res) async {
@@ -81,7 +79,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   textAlign: TextAlign.left,
                   style: TextStyle(
                     fontSize: 20.0,
-                    color: Color(LamourColors.subTextColor)
+                    color: Color(LamourColors.subTextColor),
                   ),
                 ),
               ),

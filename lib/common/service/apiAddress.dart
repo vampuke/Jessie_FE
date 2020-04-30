@@ -59,6 +59,18 @@ class Address {
     return "${host}flower";
   }
 
+  static restaurant() {
+    return "${host}restaurant";
+  }
+
+  static delRestaurant() {
+    return "${host}restaurant/restaurant/";
+  }
+
+  static delDish() {
+    return "${host}restaurant/dish/";
+  }
+
   static getPageParams(tab, page, [pageSize = Config.PAGE_SIZE]) {
     if (page != null) {
       if (pageSize != null) {

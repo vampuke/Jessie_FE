@@ -32,10 +32,11 @@ class WishSvc {
 
   static deleteWish(store, int wishId) async {
     var res = await HttpManager.netFetch(
-        Address.deleteWish() + wishId.toString(),
-        null,
-        null,
-        new Options(method: "delete"));
+      Address.deleteWish() + wishId.toString(),
+      null,
+      null,
+      new Options(method: "delete"),
+    );
     if (res != null && res.result) {
       if (res.data["code"] == 200) {
         Fluttertoast.showToast(msg: "Success");

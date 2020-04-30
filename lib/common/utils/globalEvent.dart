@@ -13,3 +13,9 @@ class IndexEvent {
 
   IndexEvent(this.pageIndex);
 }
+
+class RefreshRestaurant {
+  bool refresh;
+
+  RefreshRestaurant(this.refresh);
+}

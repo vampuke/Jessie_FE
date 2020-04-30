@@ -16,18 +16,13 @@ class ToolsPage extends StatefulWidget {
 }
 
 class _ToolsPageState extends State<ToolsPage> with WidgetsBindingObserver {
-  final List<String> entries = <String>["Food", "Flower", "Msg"];
+  final List<String> entries = <String>["Food", "Flower", "Restaurant", "Msg"];
 
-  final List<IconData> icons = <IconData>[
-    LamourICons.FOOD,
-    LamourICons.FLOWER,
-    LamourICons.FLOWER
-  ];
-
-  final List<int> colors = <int>[
-    LamourColors.deleteRed,
-    0xFF4DB6AC,
-    0xFF4DB6AC
+  final List<String> icons = <String>[
+    LamourICons.FOOD_PNG,
+    LamourICons.FLOWER_PNG,
+    LamourICons.RESTAURANT_PNG,
+    LamourICons.RESTAURANT_PNG
   ];
 
   bool _iconStatus = false;
@@ -68,6 +63,9 @@ class _ToolsPageState extends State<ToolsPage> with WidgetsBindingObserver {
       case "Flower":
         NavigatorUtils.goFlower(context);
         break;
+      case "Restaurant":
+        NavigatorUtils.goRestaurant(context);
+        break;
       case 'Msg':
         NavigatorUtils.goMsg(context);
         break;
@@ -99,10 +97,10 @@ class _ToolsPageState extends State<ToolsPage> with WidgetsBindingObserver {
         child: Row(
           children: <Widget>[
             Container(
-              child: Icon(
-                icons[index],
-                size: 40.0,
-                color: Color(colors[index]),
+              child: Image(
+                image: new AssetImage(icons[index]),
+                width: 40,
+                height: 40,
               ),
               padding: EdgeInsets.only(left: 20.0, right: 20.0),
             ),
@@ -135,17 +133,17 @@ class _ToolsPageState extends State<ToolsPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       child: Scaffold(
-              backgroundColor: Color(LamourColors.lightGray),
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text("Tools"),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(LamourICons.LOG_OUT),
-            onPressed: _logOut,
-          ),
-        ],
-      ),
+        backgroundColor: Color(LamourColors.lightGray),
+        appBar: AppBar(
+          backgroundColor: Theme.of(context).primaryColor,
+          title: Text("Tools"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(LamourICons.LOG_OUT),
+              onPressed: _logOut,
+            ),
+          ],
+        ),
         body: ListView.builder(
           padding: EdgeInsets.only(top: 20.0, bottom: 20.0),
           itemCount: entries.length,
