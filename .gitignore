@@ -71,3 +71,9 @@
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 android/android.zip
 android/key.properties
+.gradle/5.2.1/gc.properties
+.gradle/5.2.1/fileChanges/last-build.bin
+.gradle/5.2.1/fileHashes/fileHashes.lock
+.gradle/buildOutputCleanup/buildOutputCleanup.lock
+.gradle/buildOutputCleanup/cache.properties
+.gradle/vcs-1/gc.properties

@@ -113,6 +113,9 @@ class _RestaurantEditPageState extends State<RestaurantEditPage>
         .forEach((type) => typeList.add(type.type));
     List<Widget> displayList = [];
     typeList.forEach((type) => displayList.add(Text(type)));
+    if (typeList.length == 0) {
+      return;
+    }
     String selectedType = typeList[0];
     showCupertinoModalPopup(
       context: context,

@@ -45,7 +45,9 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     eventBus.on<IndexEvent>().listen((event) {
       _naviManager.savedPage = null;
-      if (event.pageIndex != 3 && event.pageIndex != 4) {
+      if (event.pageIndex != 3 &&
+          event.pageIndex != 4 &&
+          event.pageIndex != 5) {
         setState(() {
           _tabController.index = event.pageIndex;
         });
@@ -56,6 +58,9 @@ class _HomePageState extends State<HomePage> {
             break;
           case 4:
             NavigatorUtils.goFlower(context);
+            break;
+          case 5:
+            NavigatorUtils.goRestaurant(context);
             break;
           default:
         }
@@ -86,6 +91,11 @@ class _HomePageState extends State<HomePage> {
         case "flower":
           Future.delayed(Duration(milliseconds: 300), () {
             NavigatorUtils.goFlower(context);
+          });
+          break;
+        case "restaurant":
+          Future.delayed(Duration(milliseconds: 300), () {
+            NavigatorUtils.goRestaurant(context);
           });
           break;
         default:

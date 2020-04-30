@@ -91,6 +91,9 @@ class _MyAppState extends State<MyApp> {
               case 'flower':
                 eventBus.fire(IndexEvent(4));
                 break;
+              case 'restaurant':
+                eventBus.fire(IndexEvent(5));
+                break;
               default:
             }
           }
