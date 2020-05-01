@@ -30,6 +30,14 @@ class _RestaurantPageState extends State<RestaurantPage>
 
   bool hasData = false;
 
+  bool showSearchBar = false;
+
+  bool searching = false;
+
+  String searchKey;
+
+  TextEditingController searchCtrl = new TextEditingController();
+
   Store<LamourState> _getStore() {
     if (context == null) {
       return null;
@@ -266,12 +274,40 @@ class _RestaurantPageState extends State<RestaurantPage>
   }
 
   List<Restaurant> _filterRestaurant(List<Restaurant> list) {
-    if (filter == "All") {
-      return list;
-    } else if (list.length != 0) {
-      return list.where((restaurant) => (restaurant.type == filter)).toList();
-    } else {
+    if (list.length == 0) {
       return [];
+    } else {
+      List<Restaurant> filteredList;
+      if (filter == 'All') {
+        filteredList = list;
+      } else {
+        filteredList =
+            list.where((restaurant) => (restaurant.type == filter)).toList();
+      }
+      print(searchKey);
+      if (searchKey != null &&
+          searchKey.trim().length != 0 &&
+          searching == true &&
+          showSearchBar == true) {
+        List<Restaurant> searchResult = [];
+        for (Restaurant restaurant in filteredList) {
+          if (restaurant.title.contains(searchKey.trim()) ||
+              restaurant.note.contains(searchKey.trim()) ||
+              restaurant.type.contains(searchKey.trim())) {
+            searchResult.add(restaurant);
+            continue;
+          }
+          for (Dishes dish in restaurant.dishes) {
+            if (dish.title.contains(searchKey.trim()) ||
+                dish.note.contains(searchKey.trim())) {
+              searchResult.add(restaurant);
+              continue;
+            }
+          }
+        }
+        filteredList = searchResult;
+      }
+      return filteredList;
     }
   }
 
@@ -284,6 +320,50 @@ class _RestaurantPageState extends State<RestaurantPage>
       handleRefresh,
       onLoadMore,
       refreshKey: refreshIndicatorKey,
+    );
+
+    Widget searchBar = PreferredSize(
+      child: Container(
+        child: Row(
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(left: 8),
+            ),
+            Expanded(
+              child: CupertinoTextField(
+                controller: searchCtrl,
+                onChanged: (value) {
+                  setState(() {
+                    searchKey = value;
+                  });
+                },
+              ),
+            ),
+            IconButton(
+              icon: searching == true ? Icon(Icons.clear) : Icon(Icons.search),
+              onPressed: () {
+                if (searchKey == null || searchKey.trim().length == 0) {
+                  return;
+                }
+                if (searching == true && searchKey != null) {
+                  setState(() {
+                    searchKey = null;
+                    searching = false;
+                    searchCtrl.value = TextEditingValue.empty;
+                    _getRestaurant(false);
+                  });
+                } else if (searchKey != null) {
+                  setState(() {
+                    searching = true;
+                    _getRestaurant(false);
+                  });
+                }
+              },
+            ),
+          ],
+        ),
+      ),
+      preferredSize: Size.fromHeight(50),
     );
 
     return Scaffold(
@@ -311,8 +391,26 @@ class _RestaurantPageState extends State<RestaurantPage>
                 Icon(Icons.arrow_drop_down),
               ],
             ),
-          )
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.search,
+              color: Colors.black,
+            ),
+            onPressed: () {
+              setState(() {
+                showSearchBar = !showSearchBar;
+
+                if (showSearchBar == false) {
+                  searchKey = null;
+                  searching = false;
+                  _getRestaurant(false);
+                }
+              });
+            },
+          ),
         ],
+        bottom: showSearchBar == true ? searchBar : null,
       ),
       body: Container(child: restaurantContent),
       floatingActionButton: FloatingActionButton(
