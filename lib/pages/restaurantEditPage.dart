@@ -165,6 +165,44 @@ class _RestaurantEditPageState extends State<RestaurantEditPage>
     );
   }
 
+  void _changeRating() {
+    TextEditingController ratingCtrl = new TextEditingController();
+    ratingCtrl.value = new TextEditingValue(text: restaurant.rating.toString());
+    String rating = restaurant.rating.toString();
+    showCupertinoDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CupertinoAlertDialog(
+          content: CupertinoTextField(
+            decoration: LamourConstant.defaultRoundedBorderDecoration,
+            controller: ratingCtrl,
+            onChanged: (String value) {
+              rating = value;
+            },
+            placeholder: "Rating",
+          ),
+          actions: <Widget>[
+            CupertinoDialogAction(
+              child: Text('Save'),
+              onPressed: () {
+                setState(() {
+                  restaurant.rating = double.parse(rating);
+                });
+                Navigator.pop(context);
+              },
+            ),
+            CupertinoDialogAction(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _addDish() {
     _editDishDialog(new Dishes(null, '', restaurant.id, 3, ''), false);
   }
@@ -552,26 +590,28 @@ class _RestaurantEditPageState extends State<RestaurantEditPage>
                     style: attrStyle,
                   ),
                 ),
-                RatingBar(
-                  initialRating: _restRating,
-                  minRating: 0.5,
-                  direction: Axis.horizontal,
-                  allowHalfRating: true,
-                  itemCount: 5,
-                  itemSize: 28,
-                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                  unratedColor: Colors.white,
-                  itemBuilder: (context, _) => Icon(
-                    Icons.star,
-                    color: Colors.amber,
+                InkWell(
+                  onTap: _changeRating,
+                  child: RatingBarIndicator(
+                    rating: restaurant.rating,
+                    itemBuilder: (context, index) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    itemCount: 5,
+                    itemSize: 28.0,
                   ),
-                  onRatingUpdate: (rating) {
-                    setState(() {
-                      _restRating = rating;
-                      restaurant.rating = rating;
-                    });
-                  },
                 ),
+                Padding(
+                  padding: EdgeInsets.only(left: 8.0),
+                ),
+                Text(
+                  restaurant.rating.toString(),
+                  style: TextStyle(
+                    color: Color(LamourColors.deleteRed),
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
               ],
             ),
           )
