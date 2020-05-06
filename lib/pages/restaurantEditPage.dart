@@ -166,39 +166,49 @@ class _RestaurantEditPageState extends State<RestaurantEditPage>
   }
 
   void _changeRating() {
-    TextEditingController ratingCtrl = new TextEditingController();
-    ratingCtrl.value = new TextEditingValue(text: restaurant.rating.toString());
-    String rating = restaurant.rating.toString();
+    double rating = restaurant.rating;
     showCupertinoDialog(
       context: context,
       builder: (BuildContext context) {
-        return CupertinoAlertDialog(
-          content: CupertinoTextField(
-            decoration: LamourConstant.defaultRoundedBorderDecoration,
-            controller: ratingCtrl,
-            onChanged: (String value) {
-              rating = value;
-            },
-            placeholder: "Rating",
-          ),
-          actions: <Widget>[
-            CupertinoDialogAction(
-              child: Text('Save'),
-              onPressed: () {
-                setState(() {
-                  restaurant.rating = double.parse(rating);
+        return StatefulBuilder(builder: (context, state) {
+          return CupertinoAlertDialog(
+            title: Text(
+              rating.toString(),
+              style: TextStyle(
+                fontSize: 24,
+                color: Color(LamourColors.deleteRed),
+              ),
+            ),
+            content: CupertinoSlider(
+              value: rating,
+              onChanged: (value) {
+                state(() {
+                  rating = double.parse(value.toStringAsFixed(1));
                 });
-                Navigator.pop(context);
               },
+              min: 0,
+              max: 5,
+              divisions: 50,
             ),
-            CupertinoDialogAction(
-              child: Text('Cancel'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        );
+            actions: <Widget>[
+              CupertinoDialogAction(
+                child: Text('Save'),
+                onPressed: () {
+                  setState(() {
+                    restaurant.rating = rating;
+                  });
+                  Navigator.pop(context);
+                },
+              ),
+              CupertinoDialogAction(
+                child: Text('Cancel'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        });
       },
     );
   }
