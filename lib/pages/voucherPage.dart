@@ -175,7 +175,7 @@ class _VoucherPageState extends State<VoucherPage>
     VoucherViewModel eventViewModel = VoucherViewModel.fromVoucherMap(voucher);
     return new VoucherItem(eventViewModel, onPressed: () {
       User.User _currentUser = _getStore().state.userInfo;
-      if (_currentUser.role == 1) {
+      if (_currentUser.role == 1 || _currentUser.userId != voucher.userId) {
         _redeemDialog(voucher);
       } else {
         Fluttertoast.showToast(msg: "Permission denied");
