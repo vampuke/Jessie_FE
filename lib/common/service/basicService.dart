@@ -49,7 +49,7 @@ class HttpManager {
     Dio dio = new Dio();
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;
-    dio.interceptors.add(CookieManager(PersistCookieJar(dir:tempPath)));
+    dio.interceptors.add(CookieManager(PersistCookieJar(storage: FileStorage(tempPath))));
     Response response;
     try {
       response = await dio.request(url, data: params, options: option);
@@ -60,7 +60,7 @@ class HttpManager {
       } else {
         errorResponse = new Response(statusCode: 666);
       }
-      if (e.type == DioErrorType.CONNECT_TIMEOUT) {
+      if (e.type == DioErrorType.connectTimeout) {
         errorResponse.statusCode = Code.NETWORK_TIMEOUT;
       }
       if (Config.DEBUG) {

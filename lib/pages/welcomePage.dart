@@ -12,7 +12,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
 import 'dart:io';
 import 'package:redux/redux.dart';
-import 'package:install_plugin/install_plugin.dart';
+// import 'package:install_plugin/install_plugin.dart';
 import 'package:jessie_wish/common/redux/LamourState.dart';
 import 'package:jessie_wish/common/style/style.dart';
 import 'package:jessie_wish/common/utils/navigatorUtils.dart';
@@ -20,6 +20,7 @@ import 'package:jessie_wish/common/local/localStorage.dart';
 import 'package:jessie_wish/common/config/config.dart';
 import 'package:jessie_wish/common/service/oneWord.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:r_upgrade/r_upgrade.dart';
 
 class WelcomePage extends StatefulWidget {
   static final String sName = "/";
@@ -58,6 +59,19 @@ class _WelcomePageState extends State<WelcomePage> {
         VoucherSvc.readVoucher(store);
         AnnivSvc.readAnniv(store);
         FoodSvc.readFood(store);
+      }
+    });
+
+    RUpgrade.stream.listen((DownloadInfo info) {
+      if (info != null && info.percent != 0.0) {
+        _downloadState(() {
+          _downloadProgress = info.percent;
+        });
+      }
+      if (info != null && info.status == DownloadStatus.STATUS_SUCCESSFUL) {
+        _downloadState(() {
+          _downloadProgress = 100;
+        });
       }
     });
   }
@@ -131,13 +145,13 @@ class _WelcomePageState extends State<WelcomePage> {
                         padding: EdgeInsets.all(20.0),
                       ),
                       CircularProgressIndicator(
-                        value: _downloadProgress,
+                        value: _downloadProgress / 100,
                       ),
                       Padding(
                         padding: EdgeInsets.all(20.0),
                       ),
                       Text(
-                        (_downloadProgress * 100).toStringAsFixed(0) + "%",
+                        (_downloadProgress).toStringAsFixed(2) + "%",
                         style: TextStyle(fontSize: 24),
                       )
                     ],
@@ -151,17 +165,21 @@ class _WelcomePageState extends State<WelcomePage> {
     );
   }
 
-  Future<Null> installApk(String url, String version) async {
-    File _apkFile = await downloadAndroid(url, version);
-    String _apkFilePath = _apkFile.path;
+  void installApk(String url, String version) async {
+    await RUpgrade.upgrade(url,
+        fileName: 'lamourv$version.apk',
+        useDownloadManager: true,
+        isAutoRequestInstall: true);
+    // File _apkFile = await downloadAndroid(url, version);
+    // String _apkFilePath = _apkFile.path;
 
-    if (_apkFilePath.isEmpty) {
-      return;
-    }
+    // if (_apkFilePath.isEmpty) {
+    //   return;
+    // }
 
-    InstallPlugin.installApk(_apkFilePath, "com.vampuck.jessie_wish")
-        .then((result) {})
-        .catchError((error) {});
+    // InstallPlugin.installApk(_apkFilePath, "com.vampuck.jessie_wish")
+    //     .then((result) {})
+    //     .catchError((error) {});
   }
 
   Future<File> downloadAndroid(String url, String version) async {
