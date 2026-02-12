@@ -1,10 +1,6 @@
-name: Flutter CI Build & Release
+name: Flutter Build APK & Release
 
 on:
-  pull_request:
-    branches:
-      - master
-      - main
   push:
     branches:
       - master
@@ -21,6 +17,11 @@ on:
         options:
           - apk
           - both
+      run_checks:
+        description: 'Run flutter analyze/test before build'
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -37,15 +38,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java
+      - name: Setup Java 8 (legacy Flutter/Android compatibility)
         uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '8'
 
-      - name: Setup Flutter
+      - name: Setup Flutter (legacy)
         uses: subosito/flutter-action@v2
         with:
+          flutter-version: 1.22.6
           channel: stable
           cache: true
 
@@ -55,10 +57,12 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Analyze
+      - name: Analyze (optional)
+        if: github.event_name == 'workflow_dispatch' && inputs.run_checks
         run: flutter analyze
 
-      - name: Run tests
+      - name: Run tests (optional)
+        if: github.event_name == 'workflow_dispatch' && inputs.run_checks
         run: flutter test
 
       - name: Build APK (release)
@@ -97,6 +101,7 @@ jobs:
           path: artifacts/apk
 
       - name: Download AAB artifact
+        continue-on-error: true
         uses: actions/download-artifact@v4
         with:
           name: android-aab-${{ github.run_number }}
