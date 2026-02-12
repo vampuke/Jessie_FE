@@ -54,10 +54,13 @@ jobs:
       - name: Flutter doctor
         run: flutter doctor -v
 
-      - name: Verify Dart SDK constraint for legacy toolchain
+      - name: Normalize SDK constraint for legacy toolchain
         run: |
-          echo "Checking pubspec SDK constraint..."
-          grep 'sdk: ">=2.1.0 <3.0.0"' pubspec.yaml
+          echo "Ensuring pubspec uses legacy Dart SDK constraint..."
+          sed -i -E '0,/sdk: ">=3\.0\.0 <4\.0\.0"/s//sdk: ">=2.1.0 <3.0.0"/' pubspec.yaml
+          echo "Current environment SDK line:"
+          awk '/^environment:/, /^[^[:space:]]/ { if ($1=="sdk:") print }' pubspec.yaml
+          grep -Eq '^[[:space:]]*sdk:[[:space:]]*"[^"]*<3\.0\.0"' pubspec.yaml
 
       - name: Install dependencies
         run: flutter pub get
