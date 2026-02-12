@@ -54,6 +54,11 @@ jobs:
       - name: Flutter doctor
         run: flutter doctor -v
 
+      - name: Verify Dart SDK constraint for legacy toolchain
+        run: |
+          echo "Checking pubspec SDK constraint..."
+          grep 'sdk: ">=2.1.0 <3.0.0"' pubspec.yaml
+
       - name: Install dependencies
         run: flutter pub get
 

@@ -38,3 +38,10 @@
 
 
 > 兼容旧项目代码：工作流默认使用 Flutter 1.22.6 + Java 8。
+
+
+## Troubleshooting
+
+- 如果看到 `The current Dart SDK version is 2.10.5` 且 `requires SDK version >=3.0.0 <4.0.0`：
+  - 说明你运行的不是当前最新提交，或工作流基于旧提交触发。
+  - 请确保分支包含 `pubspec.yaml` 的 `sdk: ">=2.1.0 <3.0.0"`，然后重新 `Run workflow`。
