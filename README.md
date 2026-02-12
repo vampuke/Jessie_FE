@@ -19,3 +19,20 @@
 * [permission_handler](https://pub.flutter-io.cn/packages/permission_handler) Request permission for upgrade, like storage permission
 * [jpush_flutter](https://pub.flutter-io.cn/packages/jpush_flutter) Receive push notification
 * [flutter_rating_bar](https://pub.flutter-io.cn/packages/flutter_rating_bar) Display rating
+## GitHub Actions 自动构建与发布
+
+已添加工作流：`.github/workflows/flutter-build-release.yml`。
+
+- PR 到 `master/main`：执行 `flutter analyze`、`flutter test` 和 Android release 构建校验。
+- 推送到 `master/main`：自动构建 Android `apk` 与 `aab`，并上传为 Actions Artifact。
+- 推送 tag（如 `v1.0.0`）：在构建后自动创建 GitHub Release，并附加 `apk/aab` 文件。
+- 支持手动触发：`workflow_dispatch`。
+
+> 说明：若你需要发布到应用商店，还需额外配置签名与发布凭据（如 keystore、Google Play service account 等）。
+
+## 如何下载构建好的 APK
+
+1. 打开仓库 `Actions` 页面，选择 `Flutter CI Build & Release` 工作流。
+2. 点击 `Run workflow`，`build_target` 选 `apk`（只构建 APK，速度更快）或 `both`（同时构建 APK+AAB）。
+3. 任务成功后，在该次运行页面底部 `Artifacts` 区域下载 `android-apk-<run_number>`。
+4. 若是打了 `v*` tag（例如 `v1.0.12`），还会自动创建 GitHub Release，可在 Release 页面直接下载 APK/AAB。
