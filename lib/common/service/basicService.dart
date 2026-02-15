@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -43,24 +44,24 @@ class HttpManager {
     }
 
     ///超时
-    option.sendTimeout = 5000;
-    option.receiveTimeout = 5000;
+    option.sendTimeout = Duration(milliseconds: 5000);
+    option.receiveTimeout = Duration(milliseconds: 5000);
 
     Dio dio = new Dio();
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;
-    dio.interceptors.add(CookieManager(PersistCookieJar(dir:tempPath)));
+    dio.interceptors.add(CookieManager(PersistCookieJar(storage: FileStorage(tempPath))));
     Response response;
     try {
       response = await dio.request(url, data: params, options: option);
-    } on DioError catch (e) {
+    } on DioException catch (e) {
       Response errorResponse;
       if (e.response != null) {
         errorResponse = e.response;
       } else {
         errorResponse = new Response(statusCode: 666);
       }
-      if (e.type == DioErrorType.CONNECT_TIMEOUT) {
+      if (e.type == DioExceptionType.connectionTimeout) {
         errorResponse.statusCode = Code.NETWORK_TIMEOUT;
       }
       if (Config.DEBUG) {

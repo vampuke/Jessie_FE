@@ -257,7 +257,7 @@ class _RestaurantEditPageState extends State<RestaurantEditPage>
                   Padding(
                     padding: EdgeInsets.only(top: 10),
                   ),
-                  RatingBar(
+                  RatingBar.builder(
                     initialRating: dish.rating,
                     minRating: 0.5,
                     direction: Axis.horizontal,

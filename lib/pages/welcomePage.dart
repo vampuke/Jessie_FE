@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:jessie_wish/common/service/networkService.dart';
@@ -159,7 +160,7 @@ class _WelcomePageState extends State<WelcomePage> {
       return;
     }
 
-    InstallPlugin.installApk(_apkFilePath, "com.vampuck.jessie_wish")
+    InstallPlugin.installApk(_apkFilePath)
         .then((result) {})
         .catchError((error) {});
   }
@@ -231,6 +232,7 @@ class _WelcomePageState extends State<WelcomePage> {
   }
 
   Future<bool> checkPermission() async {
+    if (kIsWeb) return true;
     var status = await Permission.storage.status;
     if (!status.isGranted) {
       Map<Permission, PermissionStatus> statuses = await [

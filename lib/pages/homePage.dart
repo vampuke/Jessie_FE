@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   NaviManager _naviManager = NaviManager.instance;
 
   _renderTab(icon, text) {
-    return new BottomNavigationBarItem(icon: Icon(icon), title: Text(text));
+    return new BottomNavigationBarItem(icon: Icon(icon), label: text);
   }
 
   CupertinoTabController _tabController = new CupertinoTabController();
